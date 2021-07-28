@@ -78,77 +78,78 @@ tools:context=".MainActivity">
     tools:text="@sample/posts.json/data/content" />
 
     <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barriersecond"
+        android:id="@+id/footer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
         app:constraint_referenced_ids="content" />
 
-    <ImageView
-        android:id="@+id/likes"
-        android:layout_width="@dimen/common_spacing"
-        android:layout_height="@dimen/common_spacing"
-        android:layout_marginBottom="@dimen/common_spacing"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
+    <ImageButton
+        android:id="@+id/like"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/common_spacing"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/description_post_like"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/ic_baseline_favorite_24"
-        tools:layout_editor_absoluteY="274dp"
-         />
+        app:layout_constraintTop_toBottomOf="@id/footer"
+        app:srcCompat="@drawable/ic_baseline_favorite_24"/>
 
     <TextView
-        android:id="@+id/likes_cnt"
+        android:id="@+id/likeCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/min_margin"
-        app:layout_constraintBottom_toBottomOf="@+id/likes"
-        app:layout_constraintStart_toEndOf="@id/likes"
-        app:layout_constraintTop_toTopOf="@+id/likes"
+        tools:text="@sample/posts.json/data/likes"
+        android:layout_marginStart="@dimen/text_spacing"
+        android:layout_marginTop="@dimen/common_spacing"
+        app:layout_constraintTop_toBottomOf="@id/footer"
+        app:layout_constraintStart_toEndOf="@+id/like"
+        />
 
-        tools:text="@sample/posts.json/data/likes" />
-
-    <ImageView
-        android:id="@+id/reposts"
-        android:layout_width="@dimen/common_spacing"
-        android:layout_height="@dimen/common_spacing"
-        app:srcCompat="@drawable/ic_baseline_share_24"
-        app:layout_constraintStart_toEndOf="@id/likes"
-        android:layout_marginStart="48dp"
-        tools:layout_editor_absoluteX="89dp"
-        tools:layout_editor_absoluteY="274dp"
-         />
+    <ImageButton
+        android:id="@+id/share"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/common_spacing"
+        android:layout_marginStart="@dimen/common_spacing"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/description_post_share"
+        app:layout_constraintTop_toBottomOf="@id/footer"
+        app:layout_constraintStart_toEndOf="@+id/likeCount"
+        app:srcCompat="@drawable/ic_baseline_share_24" />
 
     <TextView
-        android:id="@+id/reposts_cnt"
+        android:id="@+id/shareCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/min_margin"
-        app:layout_constraintBottom_toBottomOf="@+id/reposts"
-        app:layout_constraintStart_toEndOf="@id/reposts"
-        app:layout_constraintTop_toTopOf="@+id/reposts"
-        tools:text="@sample/posts.json/data/reposts" />
+        android:text="@sample/posts.json/data/reposts"
+        android:layout_marginStart="@dimen/text_spacing"
+        android:layout_marginTop="@dimen/common_spacing"
+        app:layout_constraintTop_toBottomOf="@id/footer"
+        app:layout_constraintStart_toEndOf="@+id/share"
+        />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/views"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="64dp"
-        app:layout_constraintBottom_toBottomOf="@+id/likes"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/likes"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/ic_baseline_visibility_24"
-         />
+        android:layout_marginTop="@dimen/common_spacing"
+        android:layout_marginEnd="@dimen/text_spacing"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/description_post_share"
+        app:layout_constraintTop_toBottomOf="@id/footer"
+        app:layout_constraintEnd_toStartOf="@id/viewsCount"
+        app:srcCompat="@drawable/ic_baseline_visibility_24" />
 
     <TextView
-        android:id="@+id/views_cnt"
+        android:id="@+id/viewsCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/min_margin"
-        app:layout_constraintStart_toEndOf="@id/views"
-        app:layout_constraintBottom_toBottomOf="@+id/views"
-        app:layout_constraintTop_toTopOf="@+id/views"
-        tools:text="@sample/posts.json/data/views" />
-
+        android:text="@sample/posts.json/data/views"
+        android:layout_marginStart="@dimen/text_spacing"
+        android:layout_marginTop="@dimen/common_spacing"
+        app:layout_constraintTop_toBottomOf="@id/footer"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

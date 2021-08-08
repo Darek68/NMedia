@@ -1,4 +1,4 @@
-package ru.netology.nmedia.adapter
+package ru.darek.nmedia.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

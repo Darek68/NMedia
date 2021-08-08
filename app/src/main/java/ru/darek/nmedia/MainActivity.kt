@@ -7,7 +7,7 @@ import androidx.activity.viewModels
 //import kotlinx.android.synthetic.main.activity_main.*
 import androidx.appcompat.app.AppCompatActivity
 import ru.darek.nmedia.databinding.ActivityMainBinding
-import viewmodel.PostViewModel
+import ru.darek.nmedia.viewmodel.PostViewModel
 
 class MainActivity: AppCompatActivity(){
 

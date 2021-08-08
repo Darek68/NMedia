@@ -1,8 +1,8 @@
-package viewmodel
+package ru.darek.nmedia.viewmodel
 
 import androidx.lifecycle.ViewModel
-import repository.PostRepository
-import repository.PostRepositoryInMemoryImpl
+import ru.darek.nmedia.repository.PostRepository
+import ru.darek.nmedia.repository.PostRepositoryInMemoryImpl
 
 class PostViewModel : ViewModel() {
     // упрощённый вариант

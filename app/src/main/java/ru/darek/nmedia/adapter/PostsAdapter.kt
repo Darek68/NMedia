@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.darek.nmedia.R
 import ru.darek.nmedia.databinding.CardPostBinding
 import ru.darek.nmedia.dto.Post
+import ru.darek.nmedia.util.AndroidUtils
 
 typealias OnLikeListener = (post: Post) -> Unit
 
@@ -38,6 +39,9 @@ class PostViewHolder(
             author.text = post.author
             published.text = post.published
             content.text = post.content
+            likeCount.text = getStrCnt(post.likes) //!!!
+            shareCount.text = getStrCnt(post.share)
+            viewsCount.text = getStrCnt(post.views)
             like.setImageResource(
                 if (post.likedByMe) R.drawable.ic_liked_24 else R.drawable.ic_like_24
             )

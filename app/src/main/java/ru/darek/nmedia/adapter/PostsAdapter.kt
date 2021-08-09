@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.darek.nmedia.R
 import ru.darek.nmedia.databinding.CardPostBinding
 import ru.darek.nmedia.dto.Post
-//import ru.darek.nmedia.util
+import ru.darek.nmedia.util.getStrCnt
 
 typealias OnLikeListener = (post: Post) -> Unit
 
@@ -54,9 +54,11 @@ class PostViewHolder(
         }
     }
 }
+/*
 fun getStrCnt(inCnt:Int):String{
     if (inCnt >= 1000000) return String.format("%.2f M",(inCnt/1000000).toFloat())
     if (inCnt >= 10000) return String.format("%d K",inCnt/1000)
     if (inCnt >= 1000) return String.format("%.1f K",(inCnt/1000).toFloat())
     return inCnt.toString()
 }
+*/

@@ -19,9 +19,11 @@ class MainActivity : AppCompatActivity() {
             viewModel.likeById(it.id)
         }
         binding.list.adapter = adapter
+       // binding.list.itemAnimator = null
 
         viewModel.data.observe(this) { posts ->
-            adapter.list = posts
+            //adapter.list = posts
+            adapter.submitList(posts)
         }
     }
 }

@@ -2,6 +2,8 @@ package ru.darek.nmedia.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.darek.nmedia.R
 import ru.darek.nmedia.databinding.CardPostBinding
@@ -10,12 +12,8 @@ import ru.darek.nmedia.util.getStrCnt
 
 typealias OnLikeListener = (post: Post) -> Unit
 
-class PostsAdapter(private val onLikeListener: OnLikeListener) : RecyclerView.Adapter<PostViewHolder>() {
-    var list = emptyList<Post>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+class PostsAdapter(private val onLikeListener: OnLikeListener) :
+     ListAdapter<Post,PostViewHolder>(PostsDiffCallback()){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val binding = CardPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -23,11 +21,9 @@ class PostsAdapter(private val onLikeListener: OnLikeListener) : RecyclerView.Ad
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-        val post = list[position]
+        val post = getItem(position)
         holder.bind(post)
     }
-
-    override fun getItemCount(): Int = list.size
 }
 
 class PostViewHolder(
@@ -54,11 +50,13 @@ class PostViewHolder(
         }
     }
 }
-/*
-fun getStrCnt(inCnt:Int):String{
-    if (inCnt >= 1000000) return String.format("%.2f M",(inCnt/1000000).toFloat())
-    if (inCnt >= 10000) return String.format("%d K",inCnt/1000)
-    if (inCnt >= 1000) return String.format("%.1f K",(inCnt/1000).toFloat())
-    return inCnt.toString()
+class PostsDiffCallback: DiffUtil.ItemCallback<Post>(){
+    override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
+        return oldItem.id == newItem.id
+    }
+
+    override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
+        return oldItem == newItem
+    }
+
 }
-*/

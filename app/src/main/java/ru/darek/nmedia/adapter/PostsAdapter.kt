@@ -55,6 +55,9 @@ class PostViewHolder(
                 //onLikeListener(post)
                 postCallbeck.onLike(post)
             }
+            share.setOnClickListener{
+                postCallbeck.onShare(post)
+            }
         }
     }
 }

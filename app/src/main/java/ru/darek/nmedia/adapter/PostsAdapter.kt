@@ -2,22 +2,22 @@ package ru.darek.nmedia.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.darek.nmedia.R
 import ru.darek.nmedia.databinding.CardPostBinding
 import ru.darek.nmedia.dto.Post
-import ru.darek.nmedia.util.getStrCnt
+import ru.darek.nmedia.util.AndroidUtils.getStrCnt
 
 interface PostCallback{
     fun onLike(post: Post)
     fun onShare(post: Post)
+    fun onEdit(post: Post) {}
+    fun onRemove(post: Post) {}
 }
 
-//typealias OnLikeListener = (post: Post) -> Unit
-
-//class PostsAdapter(private val onLikeListener: OnLikeListener) :
 class PostsAdapter(private val postCallbeck: PostCallback) :
      ListAdapter<Post,PostViewHolder>(PostsDiffCallback()){
 
@@ -48,11 +48,27 @@ class PostViewHolder(
                 if (post.likedByMe) R.drawable.ic_liked_24 else R.drawable.ic_like_24
 
             )
-          /*  if (post.likedByMe) {
-                like.setImageResource(R.drawable.ic_liked_24)
-            } */
+
+            menu.setOnClickListener {
+                PopupMenu(it.context, it).apply {
+                    inflate(R.menu.post_options)
+                    setOnMenuItemClickListener { menuItem ->
+                        when (menuItem.itemId) {
+                            R.id.post_remove -> {
+                                postCallbeck.onRemove(post)
+                                true
+                            }
+                            R.id.post_edit -> {
+                                postCallbeck.onEdit(post)
+                                true
+                            }
+
+                            else -> false
+                        }
+                    }
+                }.show()
+            }
             like.setOnClickListener{
-                //onLikeListener(post)
                 postCallbeck.onLike(post)
             }
             share.setOnClickListener{

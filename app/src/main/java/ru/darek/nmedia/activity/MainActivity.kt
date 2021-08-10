@@ -51,7 +51,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
         binding.save.setOnClickListener {
             with(binding.content) {
                 if (text.isNullOrBlank()) {
@@ -70,6 +69,28 @@ class MainActivity : AppCompatActivity() {
                 clearFocus()
                 AndroidUtils.hideKeyboard(this)
             }
+        }
+        binding.content.setOnClickListener {
+            Toast.makeText(
+                this@MainActivity,
+                "Будем показывать кнопку",
+                Toast.LENGTH_SHORT
+            ).show()
+                binding.group.visibility = View.VISIBLE
+
+        }
+        binding.cancel.setOnClickListener {
+            Toast.makeText(
+                this@MainActivity,
+                "Будем прятать кнопку",
+                Toast.LENGTH_SHORT
+            ).show()
+            binding.content.setText("")
+            binding.content.clearFocus()
+            AndroidUtils.hideKeyboard(binding.content)
+               // binding.group.visibility = View.GONE // перестаёт занимать место на экране
+               // binding.group.visibility = View.INVISIBLE // невидима, но занимает место на экране
+
         }
     }
 }

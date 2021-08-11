@@ -39,13 +39,7 @@ tools:context=".activity.MainActivity">
     app:layout_constraintEnd_toStartOf="@id/save"
     app:layout_constraintStart_toStartOf="parent"
     />
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/group"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@id/content"
-        app:constraint_referenced_ids="cancel,createPen,textTitl,textCont,constrPen" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constrPen"
         android:layout_width="match_parent"
@@ -53,6 +47,13 @@ tools:context=".activity.MainActivity">
         android:background="@color/white"
         app:layout_constraintBottom_toTopOf="@id/content"
         tools:context=".activity.MainActivity">
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@id/constrPen"
+            app:constraint_referenced_ids="cancel,createPen,textTitl,textCont,constrPen" />
     <ImageView
         android:id="@+id/createPen"
         android:layout_width="@dimen/pic_scale"

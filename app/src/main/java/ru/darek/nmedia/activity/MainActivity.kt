@@ -47,10 +47,11 @@ class MainActivity : AppCompatActivity() {
         viewModel.edited.observe(this) { post ->
             if (post.id == 0L) {
                 return@observe
-            } //else binding.group.visibility = View.VISIBLE
+            } else binding.group.visibility = View.VISIBLE
             with(binding.content) {
                 requestFocus()
                 setText(post.content)
+                binding.textCont.text = post.content
             }
         }
 

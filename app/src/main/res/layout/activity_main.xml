@@ -44,7 +44,51 @@ tools:context=".activity.MainActivity">
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="visible"
-        app:constraint_referenced_ids="cancel" />
+        app:constraint_referenced_ids="cancel,createPen,textTitl,textCont" />
+    <ImageButton
+        android:id="@+id/createPen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/common_spacing"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/description_post_like"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/content"
+        app:layout_constraintBottom_toTopOf="@id/content"
+        app:srcCompat="@drawable/ic_baseline_create_24"
+        />
+    <TextView
+        android:id="@+id/textTitl"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/common_spacing"
+        android:layout_marginStart="@dimen/common_spacing"
+        android:layout_marginEnd="@dimen/common_spacing"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textStyle="bold"
+        android:textColor="@color/teal_700"
+        android:text="@string/edit_message"
+        app:layout_constraintBottom_toTopOf="@id/textCont"
+        app:layout_constraintStart_toEndOf="@id/createPen"
+        app:layout_constraintEnd_toStartOf="@id/save"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="@string/edit_message" />
+    <TextView
+        android:id="@+id/textCont"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/common_spacing"
+        android:layout_marginStart="@dimen/common_spacing"
+        android:layout_marginEnd="@dimen/common_spacing"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:maxLines="1"
+        app:layout_constraintBottom_toTopOf="@id/content"
+        app:layout_constraintStart_toEndOf="@id/createPen"
+        app:layout_constraintEnd_toStartOf="@id/save"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="@string/first_str" />
     <ImageButton
         android:id="@+id/cancel"
         android:layout_width="wrap_content"
@@ -54,7 +98,7 @@ tools:context=".activity.MainActivity">
         android:contentDescription="@string/description_post_like"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/content"
-        app:layout_constraintBottom_toTopOf="@id/save"
+        app:layout_constraintBottom_toTopOf="@id/content"
         app:srcCompat="@drawable/ic_baseline_cancel_24"
         />
 <ImageButton

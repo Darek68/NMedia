@@ -1,6 +1,7 @@
 package ru.darek.nmedia.activity
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 //import android.text.TextUtils
 import androidx.activity.viewModels
@@ -40,11 +41,13 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.data.observe(this) { posts ->
             adapter.submitList(posts)
+            binding.group.visibility = View.GONE // перестаёт занимать место на экране
+            //binding.group.visibility = View.INVISIBLE // невидима, но занимает место на экране
         }
         viewModel.edited.observe(this) { post ->
             if (post.id == 0L) {
                 return@observe
-            }
+            } //else binding.group.visibility = View.VISIBLE
             with(binding.content) {
                 requestFocus()
                 setText(post.content)
@@ -71,25 +74,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
         binding.content.setOnClickListener {
-            Toast.makeText(
-                this@MainActivity,
-                "Будем показывать кнопку",
-                Toast.LENGTH_SHORT
-            ).show()
-                binding.group.visibility = View.VISIBLE
-
+            binding.group.visibility = View.VISIBLE
         }
         binding.cancel.setOnClickListener {
-            Toast.makeText(
-                this@MainActivity,
-                "Будем прятать кнопку",
-                Toast.LENGTH_SHORT
-            ).show()
             binding.content.setText("")
             binding.content.clearFocus()
             AndroidUtils.hideKeyboard(binding.content)
-               // binding.group.visibility = View.GONE // перестаёт занимать место на экране
-               // binding.group.visibility = View.INVISIBLE // невидима, но занимает место на экране
+            binding.group.visibility = View.GONE // перестаёт занимать место на экране
+            //binding.group.visibility = View.INVISIBLE // невидима, но занимает место на экране
 
         }
     }

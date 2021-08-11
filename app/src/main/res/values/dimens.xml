@@ -4,4 +4,5 @@
   <dimen name="posts_avatar_size">48dp</dimen>
   <dimen name="min_margin">8dp</dimen>
   <dimen name="text_spacing">8dp</dimen>
+  <dimen name="pic_scale">24dp</dimen>
 </resources>

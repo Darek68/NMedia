@@ -1,9 +1,14 @@
 package ru.darek.nmedia.repository
 
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import ru.darek.nmedia.dto.Post
+//import java.time.LocalDate
+import java.time.LocalDateTime
+//import java.time.format.DateTimeFormatter
 
 class PostRepositoryInMemoryImpl : PostRepository {
     private var nextId = 1L
@@ -105,6 +110,7 @@ class PostRepositoryInMemoryImpl : PostRepository {
     override fun getAll(): LiveData<List<Post>> = data
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun save(post: Post) {
         posts = if (post.id == 0L) {
             // написать : remove hardcoded author & published
@@ -113,7 +119,7 @@ class PostRepositoryInMemoryImpl : PostRepository {
                     id = nextId++,
                     author = "Me",
                     likedByMe = false,
-                    published = "now"
+                    published = LocalDateTime.now().toString()
                 )
             ) + posts} else posts.map {if (it.id != post.id) it else it.copy(content = post.content)}
         data.value = posts

@@ -41,13 +41,22 @@ class PostViewHolder(
             author.text = post.author
             published.text = post.published
             content.text = post.content
-            likeCount.text = getStrCnt(post.likes)
-            shareCount.text = getStrCnt(post.share)
+           // likeCount.text = getStrCnt(post.likes)
+           // shareCount.text = getStrCnt(post.share)
             viewsCount.text = getStrCnt(post.views)
-            like.setImageResource(
+            like.text = getStrCnt(post.likes)
+            share.text = getStrCnt(post.share)
+           /* like.setImageResource(
                 if (post.likedByMe) R.drawable.ic_liked_24 else R.drawable.ic_like_24
-
-            )
+            ) */
+           // like.setIconResource(if (post.likedByMe) R.drawable.ic_liked_24 else R.drawable.ic_like_24)
+            if (post.likedByMe){
+                like.setIconResource(R.drawable.ic_liked_24)
+                like.setIconTintResource(R.color.red)
+            } else {
+                like.setIconResource(R.drawable.ic_like_24)
+                like.setIconTintResource(R.color.grey)
+            }
 
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {

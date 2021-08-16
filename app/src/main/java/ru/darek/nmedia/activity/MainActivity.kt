@@ -15,7 +15,7 @@ import ru.darek.nmedia.databinding.ActivityMainBinding
 import ru.darek.nmedia.dto.Post
 import ru.darek.nmedia.util.AndroidUtils
 import ru.darek.nmedia.viewmodel.PostViewModel
-import ru.netology.nmedia.activity.NewPostResultContract
+import ru.darek.nmedia.activity.NewPostResultContract
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,17 +57,25 @@ class MainActivity : AppCompatActivity() {
            // binding.group.visibility = View.GONE // перестаёт занимать место на экране
             //binding.group.visibility = View.INVISIBLE // невидима, но занимает место на экране
         }
-     /*   viewModel.edited.observe(this) { post ->
-            if (post.id == 0L) {
-                return@observe
-            } else binding.group.visibility = View.VISIBLE
+        val newPostLauncher = registerForActivityResult(NewPostResultContract()) { result ->
+            result ?: return@registerForActivityResult
+            viewModel.changeContent(result)
+            viewModel.save()
+        }
+        binding.fab.setOnClickListener {
+            newPostLauncher.launch()
+        }
+        viewModel.edited.observe(this) { post ->
+            if (post.id == 0L) return@observe
+
+           /* binding.group.visibility = View.VISIBLE
             with(binding.content) {
                 requestFocus()
                 setText(post.content)
                 binding.textCont.text = post.content
-            }
+            } */
         }
-
+/*
         binding.save.setOnClickListener {
             with(binding.content) {
                 if (text.isNullOrBlank()) {
@@ -97,13 +105,6 @@ class MainActivity : AppCompatActivity() {
             AndroidUtils.hideKeyboard(binding.content)
             binding.group.visibility = View.GONE // перестаёт занимать место на экране
         } */
-        val newPostLauncher = registerForActivityResult(NewPostResultContract()) { result ->
-            result ?: return@registerForActivityResult
-            viewModel.changeContent(result)
-            viewModel.save()
-        }
-        binding.fab.setOnClickListener {
-            newPostLauncher.launch()
-        }
+
     }
 }

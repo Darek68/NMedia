@@ -16,6 +16,7 @@ interface PostCallback{
     fun onShare(post: Post)
     fun onEdit(post: Post) {}
     fun onRemove(post: Post) {}
+    fun onVideo(post: Post)
 }
 
 class PostsAdapter(private val postCallbeck: PostCallback) :
@@ -74,6 +75,12 @@ class PostViewHolder(
             }
             share.setOnClickListener{
                 postCallbeck.onShare(post)
+            }
+            video.setOnClickListener {
+                postCallbeck.onVideo(post)
+            }
+            videoLayout.setOnClickListener {
+                postCallbeck.onVideo(post)
             }
         }
     }

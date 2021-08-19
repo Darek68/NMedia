@@ -80,6 +80,29 @@
         app:layout_constraintTop_toBottomOf="@id/barrier"
         tools:text="@sample/posts.json/data/content" />
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:background="@drawable/ic_banner_fon"
+        app:layout_constraintTop_toBottomOf="@id/content"
+        app:layout_constraintBottom_toTopOf="@id/footer"
+        app:constraint_referenced_ids="" >
+        <ImageButton
+            android:id="@+id/play"
+            android:layout_width="@dimen/pic_scale"
+            android:layout_height="@dimen/pic_scale"
+            android:scaleType="fitXY"
+            android:layout_marginTop="@dimen/common_spacing"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/description_post_like"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:srcCompat="@drawable/ic_baseline_play_circle_filled_24"
+            />
+    </androidx.constraintlayout.widget.Group>
+
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/footer"
         android:layout_width="wrap_content"

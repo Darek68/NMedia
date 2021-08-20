@@ -13,5 +13,8 @@
     <string name="error_empty_content">Содержание не может быть пустым!</string>
     <string name="first_str">First string</string>
     <string name="edit_message">Edit message</string>
-
+    <string name="add_post">Новый</string>
+    <string name="description_post_save">Сохранить</string>
+    <string name="chooser_share_post">Поделись</string>
+    <string name="chooser_video_player">Выбери проигрыватель</string>
 </resources>

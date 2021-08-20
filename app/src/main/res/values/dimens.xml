@@ -6,4 +6,5 @@
   <dimen name="min_margin">8dp</dimen>
   <dimen name="text_spacing">8dp</dimen>
   <dimen name="pic_scale">24dp</dimen>
+  <dimen name="fab_margin">16dp</dimen>
 </resources>

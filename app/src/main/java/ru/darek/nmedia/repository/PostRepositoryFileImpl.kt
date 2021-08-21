@@ -26,7 +26,7 @@ class PostRepositoryFileImpl(
         if (file.exists()) {
             try {
                 // если файл есть - читаем
-                throw IOException("Тестовое исключение!!")
+               // throw IOException("Тестовое исключение!!")
                 context.openFileInput(filename).bufferedReader().use {
                     posts = gson.fromJson(it, type)
                     data.value = posts

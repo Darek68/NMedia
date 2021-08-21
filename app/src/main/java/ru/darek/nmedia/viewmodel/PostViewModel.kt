@@ -1,10 +1,14 @@
 package ru.darek.nmedia.viewmodel
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+//import androidx.lifecycle.ViewModel
 import ru.darek.nmedia.dto.Post
 import ru.darek.nmedia.repository.PostRepository
 import ru.darek.nmedia.repository.PostRepositoryInMemoryImpl
+import ru.darek.nmedia.repository.PostRepositorySharedPrefsImpl
+import ru.darek.nmedia.repository.PostRepositoryFileImpl
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 
 private val empty = Post(
     id = 0,
@@ -18,9 +22,11 @@ private val empty = Post(
     video = ""
 )
 
-class PostViewModel : ViewModel() {
+class PostViewModel(application: Application) : AndroidViewModel(application) {
     // упрощённый вариант
-    private val repository: PostRepository = PostRepositoryInMemoryImpl()
+    //private val repository: PostRepository = PostRepositoryInMemoryImpl()
+    //private val repository: PostRepository = PostRepositorySharedPrefsImpl(application)
+    private val repository: PostRepository = PostRepositoryFileImpl(application)
     val data = repository.getAll()
 
     val edited = MutableLiveData(empty)

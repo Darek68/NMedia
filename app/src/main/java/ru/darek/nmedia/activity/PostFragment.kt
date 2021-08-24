@@ -25,7 +25,7 @@ class PostFragment : Fragment() {
     private val viewModel: PostViewModel by viewModels(
         ownerProducer = ::requireParentFragment
     )
-    private val post: Post? = viewModel.edited.value
+    //private val post: Post? = viewModel.edited.value
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

@@ -80,6 +80,7 @@ class FeedFragment : Fragment() {
                 val videoIntent = Intent.createChooser(intent, getString(R.string.chooser_video_player))
                 startActivity(videoIntent)
             }
+
             override fun onContent(post: Post) {
                 Toast.makeText(
                     context,

@@ -25,7 +25,7 @@ class PostFragment : Fragment() {
     private val viewModel: PostViewModel by viewModels(
         ownerProducer = ::requireParentFragment
     )
-    val post = viewModel.edited.value
+    private val post: Post? = viewModel.edited.value
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -36,7 +36,8 @@ class PostFragment : Fragment() {
             container,
             false
         )
-        binding.apply {
+        binding.content.setText(viewModel.edited.value?.content)
+       /* binding.apply {
             if (post != null) {
                 author.text = post.author
                 published.text = post.published
@@ -48,12 +49,7 @@ class PostFragment : Fragment() {
                 like.setIconTintResource(if (post.likedByMe) R.color.red else R.color.grey)
                 like.isChecked = post.likedByMe
             }
-        }
-      /*  arguments?.getLong("id").let {
-            findPostById
-        }
-        arguments?.getString("content").let {  binding.edit.setText(it) }
-        binding.content.setText(it) */
+        } */
 
         val adapter = PostsAdapter(object : PostCallback {
             override fun onEdit(post: Post) {
@@ -99,11 +95,15 @@ class PostFragment : Fragment() {
                 val videoIntent = Intent.createChooser(intent, getString(R.string.chooser_video_player))
                 startActivity(videoIntent)
             }
-
             override fun onContent(post: Post) {
                 //
             }
         })
+       /* binding.list.adapter = adapter
+        viewModel.data.observe(viewLifecycleOwner) { posts ->
+            adapter.submitList(posts)
+        } */
+
         return binding.root
     }
 }

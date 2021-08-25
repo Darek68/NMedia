@@ -97,11 +97,13 @@ class PostFragment : Fragment() {
                             findNavController().popBackStack()
                             true
                         }
+
                         R.id.post_edit -> {
                             val bundle = Bundle().apply {
                                 putString("content",thisPost!!.content)
                             }
-                            viewModel.edited.value = thisPost
+                            //viewModel.edited.value = thisPost
+                            viewModel.edit(thisPost!!)
                             findNavController().navigate(
                                 R.id.action_postFragment_to_newPostFragment,
                                 bundle

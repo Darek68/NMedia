@@ -27,7 +27,7 @@ class PostFragment : Fragment() {
     private val viewModel: PostViewModel by viewModels(
         ownerProducer = ::requireParentFragment
     )
-    //private val post: Post? = viewModel.edited.value
+    var thisPost: Post? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -45,6 +45,7 @@ class PostFragment : Fragment() {
                 "Не указан id поста!",
                 Toast.LENGTH_SHORT
             ).show()
+            return binding.root
         }
         Toast.makeText(
             context,
@@ -55,20 +56,64 @@ class PostFragment : Fragment() {
       //  binding.content.setText(viewModel.edited.value?.content)
         viewModel.data.observe(viewLifecycleOwner) { posts ->
             posts.map {post ->
-                if (post.id == id)   binding.apply {
-                    author.text = post.author
-                    published.text = post.published
-                    content.text = post.content
-                    like.text = getStrCnt(post.likes)
-                    share.text = getStrCnt(post.share)
-                    views.text = getStrCnt(post.views)
-                    group.visibility =  if (post.video.isBlank()) View.GONE else View.VISIBLE
-                    like.setIconTintResource(if (post.likedByMe) R.color.red else R.color.grey)
-                    like.isChecked = post.likedByMe
+                if (post.id == id) {
+                    thisPost = post
+                    binding.apply {
+                        author.text = post.author
+                        published.text = post.published
+                        content.text = post.content
+                        like.text = getStrCnt(post.likes)
+                        share.text = getStrCnt(post.share)
+                        views.text = getStrCnt(post.views)
+                        group.visibility = if (post.video.isBlank()) View.GONE else View.VISIBLE
+                        like.setIconTintResource(if (post.likedByMe) R.color.red else R.color.grey)
+                        like.isChecked = post.likedByMe
+
+                    }
                 }
             }
         }
-        viewModel.edited.observe(viewLifecycleOwner) { post ->
+        if (thisPost == null) {
+            Toast.makeText(
+                context,
+                "Не найден пост!",
+                Toast.LENGTH_SHORT
+            ).show()
+           // findNavController().popBackStack()
+        }
+        binding.menu.setOnClickListener {
+            PopupMenu(it.context, it).apply {
+                inflate(R.menu.post_options)
+                setOnMenuItemClickListener { menuItem ->
+                    when (menuItem.itemId) {
+                        R.id.post_remove -> {
+                            Toast.makeText(
+                                context,
+                                "Тут будем удалять пост!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            //postCallbeck.onRemove(post)
+                            viewModel.removeById(id)
+                            findNavController().popBackStack()
+                            true
+                        }
+                        R.id.post_edit -> {
+                            val bundle = Bundle().apply {
+                                putString("content",thisPost!!.content)
+                            }
+                            viewModel.edited.value = thisPost
+                            findNavController().navigate(
+                                R.id.action_postFragment_to_newPostFragment,
+                                bundle
+                            )
+                            true
+                        }
+                        else -> false
+                    }
+                }
+            }.show()
+        }
+      /*  viewModel.edited.observe(viewLifecycleOwner) { post ->
             binding.apply {
                 author.text = post.author
                 published.text = post.published
@@ -93,6 +138,7 @@ class PostFragment : Fragment() {
                                 Toast.LENGTH_SHORT
                             ).show()
                             //postCallbeck.onRemove(post)
+                            viewModel.removeById(post.id)
                             findNavController().popBackStack()
                             true
                         }
@@ -111,9 +157,9 @@ class PostFragment : Fragment() {
                     }
                 }
             }.show()
-        }
+        } */
 
-        }
+
        /*
        // binding.list.adapter = adapter
         viewModel.data.observe(viewLifecycleOwner) { posts ->

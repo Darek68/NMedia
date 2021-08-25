@@ -17,6 +17,7 @@ import ru.darek.nmedia.adapter.PostCallback
 import ru.darek.nmedia.adapter.PostsAdapter
 import ru.darek.nmedia.databinding.CardPostBinding
 import ru.darek.nmedia.databinding.FragmentFeedBinding
+import ru.darek.nmedia.databinding.FragmentPostBinding
 import ru.darek.nmedia.dto.Post
 import ru.darek.nmedia.util.AndroidUtils
 import ru.darek.nmedia.util.AndroidUtils.getStrCnt
@@ -33,7 +34,8 @@ class PostFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = CardPostBinding.inflate(
+       // val binding = CardPostBinding.inflate(
+        val binding = FragmentPostBinding.inflate(
             inflater,
             container,
             false

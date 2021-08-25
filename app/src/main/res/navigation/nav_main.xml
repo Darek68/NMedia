@@ -30,7 +30,18 @@
         android:id="@+id/postFragment"
         android:name="ru.darek.nmedia.activity.PostFragment"
         android:label="post_fragment"
-        tools:layout="@layout/post_fragment" />
+        tools:layout="@layout/post_fragment" >
+        <action
+            android:id="@+id/action_postFragment_to_newPostFragment"
+            app:destination="@id/newPostFragment" />
+    </fragment>
+    <action
+        android:id="@+id/action_to_newPostFragment"
+        app:destination="@id/newPostFragment"
+        app:enterAnim="@android:anim/slide_in_left"
+        app:exitAnim="@android:anim/fade_out"
+        app:popEnterAnim="@android:anim/fade_in"
+        app:popExitAnim="@android:anim/fade_out" />
 </navigation>
 
 

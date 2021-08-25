@@ -82,11 +82,11 @@ class FeedFragment : Fragment() {
             }
 
             override fun onContent(post: Post) {
-                Toast.makeText(
+               /* Toast.makeText(
                     context,
                     "Клик!",
                     Toast.LENGTH_SHORT
-                ).show()
+                ).show() */
                 val bundle = Bundle().apply {
                     putLong("id",post.id)
                 }

@@ -53,7 +53,21 @@ class PostFragment : Fragment() {
         ).show()
      //  val post = getPostById(id)
       //  binding.content.setText(viewModel.edited.value?.content)
-
+        viewModel.data.observe(viewLifecycleOwner) { posts ->
+            posts.map {post ->
+                if (post.id == id)   binding.apply {
+                    author.text = post.author
+                    published.text = post.published
+                    content.text = post.content
+                    like.text = getStrCnt(post.likes)
+                    share.text = getStrCnt(post.share)
+                    views.text = getStrCnt(post.views)
+                    group.visibility =  if (post.video.isBlank()) View.GONE else View.VISIBLE
+                    like.setIconTintResource(if (post.likedByMe) R.color.red else R.color.grey)
+                    like.isChecked = post.likedByMe
+                }
+            }
+        }
         viewModel.edited.observe(viewLifecycleOwner) { post ->
             binding.apply {
                 author.text = post.author

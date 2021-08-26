@@ -40,6 +40,7 @@ class PostFragment : Fragment() {
             container,
             false
         )
+        //addView(binding.root)
         val id = arguments?.getLong("id") // id отображаемого поста
         if (id == null) {
             Toast.makeText(
@@ -60,7 +61,7 @@ class PostFragment : Fragment() {
             posts.map {post ->
                 if (post.id == id) {
                     thisPost = post
-                    binding.apply {
+                    binding.post.apply {
                         author.text = post.author
                         published.text = post.published
                         content.text = post.content
@@ -83,7 +84,7 @@ class PostFragment : Fragment() {
             ).show()
            // findNavController().popBackStack()
         }
-        binding.menu.setOnClickListener {
+        binding.post.menu.setOnClickListener {
             PopupMenu(it.context, it).apply {
                 inflate(R.menu.post_options)
                 setOnMenuItemClickListener { menuItem ->
@@ -117,58 +118,7 @@ class PostFragment : Fragment() {
                 }
             }.show()
         }
-      /*  viewModel.edited.observe(viewLifecycleOwner) { post ->
-            binding.apply {
-                author.text = post.author
-                published.text = post.published
-                content.text = post.content
-                like.text = getStrCnt(post.likes)
-                share.text = getStrCnt(post.share)
-                views.text = getStrCnt(post.views)
-                group.visibility =  if (post.video.isBlank()) View.GONE else View.VISIBLE
-                like.setIconTintResource(if (post.likedByMe) R.color.red else R.color.grey)
-                like.isChecked = post.likedByMe
-            }
 
-        binding.menu.setOnClickListener {
-            PopupMenu(it.context, it).apply {
-                inflate(R.menu.post_options)
-                setOnMenuItemClickListener { menuItem ->
-                    when (menuItem.itemId) {
-                        R.id.post_remove -> {
-                            Toast.makeText(
-                                context,
-                                "Тут будем удалять пост!",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            //postCallbeck.onRemove(post)
-                            viewModel.removeById(post.id)
-                            findNavController().popBackStack()
-                            true
-                        }
-                        R.id.post_edit -> {
-                            val bundle = Bundle().apply {
-                                putString("content",post.content)
-                            }
-                            viewModel.edited.value = post
-                            findNavController().navigate(
-                                R.id.action_postFragment_to_newPostFragment,
-                                bundle
-                            )
-                            true
-                        }
-                        else -> false
-                    }
-                }
-            }.show()
-        } */
-
-
-       /*
-       // binding.list.adapter = adapter
-        viewModel.data.observe(viewLifecycleOwner) { posts ->
-            adapter.submitList(posts)
-        } */
 
         return binding.root
     }

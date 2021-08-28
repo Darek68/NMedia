@@ -1,14 +1,13 @@
 package ru.darek.nmedia.viewmodel
 
 import androidx.lifecycle.MutableLiveData
-//import androidx.lifecycle.ViewModel
-import ru.darek.nmedia.dto.Post
-import ru.darek.nmedia.repository.PostRepository
-import ru.darek.nmedia.repository.PostRepositoryInMemoryImpl
-import ru.darek.nmedia.repository.PostRepositorySharedPrefsImpl
-import ru.darek.nmedia.repository.PostRepositoryFileImpl
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.*
+//import androidx.lifecycle.AndroidViewModel
+import ru.darek.nmedia.db.AppDb
+import ru.darek.nmedia.dto.Post
+import ru.darek.nmedia.repository.*
+import java.io.Closeable
 
 private val empty = Post(
     id = 0,
@@ -24,8 +23,11 @@ private val empty = Post(
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {
     // упрощённый вариант
+    private val repository: PostRepository = PostRepositorySQLiteImpl(
+        AppDb.getInstance(application).postDao
+    )
     //private val repository: PostRepository = PostRepositoryInMemoryImpl()
-    private val repository: PostRepository = PostRepositorySharedPrefsImpl(application)
+    //private val repository: PostRepository = PostRepositorySharedPrefsImpl(application)
     //private val repository: PostRepository = PostRepositoryFileImpl(application)
     val data = repository.getAll()
 

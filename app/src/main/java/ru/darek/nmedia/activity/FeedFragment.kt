@@ -35,7 +35,9 @@ class FeedFragment : Fragment() {
             container,
             false
         )
-
+      /*  binding.list.submitList {
+            binding.list.smoothScrolltoPosition(0)
+        } */
         val adapter = PostsAdapter(object : PostCallback {
             override fun onEdit(post: Post) {
                 viewModel.edit(post)
@@ -100,6 +102,9 @@ class FeedFragment : Fragment() {
         binding.list.adapter = adapter
         viewModel.data.observe(viewLifecycleOwner) { posts ->
             adapter.submitList(posts)
+          /*  list.submitList {
+                list.smoothScrolltoPosition(0)
+            } */
         }
 
         binding.fab.setOnClickListener {
@@ -110,6 +115,7 @@ class FeedFragment : Fragment() {
                 R.id.action_feedFragment_to_newPostFragment,
                 bundle
             )
+
           /*  activity?.supportFragmentManager?.commit {
                 add(R.id.nav_host_fragment,NewPostFragment())
                 addToBackStack("FeedFragment")

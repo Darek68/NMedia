@@ -50,11 +50,11 @@ class PostFragment : Fragment() {
             ).show()
             return binding.root
         }
-        Toast.makeText(
+       /* Toast.makeText(
             context,
             "id = " + id.toString(),
             Toast.LENGTH_SHORT
-        ).show()
+        ).show() */
      //  val post = getPostById(id)
       //  binding.content.setText(viewModel.edited.value?.content)
         viewModel.data.observe(viewLifecycleOwner) { posts ->
@@ -76,14 +76,14 @@ class PostFragment : Fragment() {
                 }
             }
         }
-        if (thisPost == null) {
+       /* if (thisPost == null) {
             Toast.makeText(
                 context,
                 "Не найден пост!",
                 Toast.LENGTH_SHORT
             ).show()
            // findNavController().popBackStack()
-        }
+        } */
         binding.post.menu.setOnClickListener {
             PopupMenu(it.context, it).apply {
                 inflate(R.menu.post_options)

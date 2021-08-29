@@ -30,9 +30,9 @@ class PostDaoImpl(private val db: SQLiteDatabase) : PostDao {
         const val COLUMN_PUBLISHED = "published"
         const val COLUMN_LIKED_BY_ME = "likedByMe"
         const val COLUMN_LIKES = "likes"
-        const val COLUMN_SHARE = "likes"
-        const val COLUMN_VIEWS = "likes"
-        const val COLUMN_VIDEO = "likes"
+        const val COLUMN_SHARE = "share"
+        const val COLUMN_VIEWS = "views"
+        const val COLUMN_VIDEO = "video"
 
         val ALL_COLUMNS = arrayOf(
             COLUMN_ID,

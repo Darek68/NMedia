@@ -1,5 +1,6 @@
 package ru.darek.nmedia.activity
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -43,6 +44,7 @@ class FeedFragment : Fragment() {
                 viewModel.edit(post)
                 val bundle = Bundle().apply {
                     putString("content",post.content)
+                    putBoolean("edit",true) // признак редактирования
                 }
                 findNavController().navigate(
                     R.id.action_feedFragment_to_newPostFragment,
@@ -84,11 +86,6 @@ class FeedFragment : Fragment() {
             }
 
             override fun onContent(post: Post) {
-               /* Toast.makeText(
-                    context,
-                    "Клик!",
-                    Toast.LENGTH_SHORT
-                ).show() */
                 val bundle = Bundle().apply {
                     putLong("id",post.id)
                 }
@@ -115,13 +112,7 @@ class FeedFragment : Fragment() {
                 R.id.action_feedFragment_to_newPostFragment,
                 bundle
             )
-
-          /*  activity?.supportFragmentManager?.commit {
-                add(R.id.nav_host_fragment,NewPostFragment())
-                addToBackStack("FeedFragment")
-            } */
         }
-
         return binding.root
     }
 }

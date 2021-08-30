@@ -20,11 +20,7 @@ class PostRepositoryFileImpl(
     private var nextId = 1L
     private var posts = emptyList<Post>()
     private val data = MutableLiveData(posts)
-
-  /*  val prefsDraft by lazy { context?.getSharedPreferences("myDrafts", Context.MODE_PRIVATE) }
-    prefsDraft?.edit()?.let {
-       // nextId = prefsDraft?.getLong("nextId", 1L)!!
-    } */
+    private val prefsDraft by lazy { context?.getSharedPreferences("myDrafts", Context.MODE_PRIVATE) }
 
     init {
         val file = context.filesDir.resolve(filename)
@@ -41,9 +37,12 @@ class PostRepositoryFileImpl(
                 Toast.makeText(context,err,Toast.LENGTH_LONG).show()
                 sync()
             }
-           // finally {context.close}
         } else { // если нет, записываем пустой массив
             sync()
+        }
+        prefsDraft?.edit()?.let {
+            prefsDraft?.getLong("nextId", 1L)?.let { nextId = it }
+            prefsDraft?.edit()?.apply()
         }
     }
     // для презентации убрали пустые строки
@@ -99,6 +98,10 @@ class PostRepositoryFileImpl(
     private fun sync() {
         context.openFileOutput(filename, Context.MODE_PRIVATE).bufferedWriter().use {
             it.write(gson.toJson(posts))
+        }
+        prefsDraft?.edit()?.let {
+            it.putLong("nextId", nextId)
+            it.apply()
         }
     }
 }

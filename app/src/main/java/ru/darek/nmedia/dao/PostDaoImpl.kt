@@ -17,7 +17,7 @@ class PostDaoImpl(private val db: SQLiteDatabase) : PostDao {
             ${PostColumns.COLUMN_LIKES} INTEGER NOT NULL DEFAULT 0,
             ${PostColumns.COLUMN_SHARE} INTEGER NOT NULL DEFAULT 0,
             ${PostColumns.COLUMN_VIEWS} INTEGER NOT NULL DEFAULT 0,
-            ${PostColumns.COLUMN_VIDEO} TEXT NOT NULL
+            ${PostColumns.COLUMN_VIDEO} TEXT NOT NULL DEFAULT ''
         );
         """.trimIndent()
     }
@@ -86,7 +86,7 @@ class PostDaoImpl(private val db: SQLiteDatabase) : PostDao {
             null,
         ).use {
             it.moveToNext()
-            val x = it.getLong(it.getColumnIndexOrThrow(ru.darek.nmedia.dao.PostDaoImpl.PostColumns.COLUMN_ID))
+            //val x = it.getLong(it.getColumnIndexOrThrow(ru.darek.nmedia.dao.PostDaoImpl.PostColumns.COLUMN_ID))
             return map(it)
         }
     }

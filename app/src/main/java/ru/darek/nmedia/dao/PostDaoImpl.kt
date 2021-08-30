@@ -86,6 +86,7 @@ class PostDaoImpl(private val db: SQLiteDatabase) : PostDao {
             null,
         ).use {
             it.moveToNext()
+            val x = it.getLong(it.getColumnIndexOrThrow(ru.darek.nmedia.dao.PostDaoImpl.PostColumns.COLUMN_ID))
             return map(it)
         }
     }

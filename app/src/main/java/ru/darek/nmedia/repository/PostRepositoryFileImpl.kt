@@ -21,6 +21,11 @@ class PostRepositoryFileImpl(
     private var posts = emptyList<Post>()
     private val data = MutableLiveData(posts)
 
+  /*  val prefsDraft by lazy { context?.getSharedPreferences("myDrafts", Context.MODE_PRIVATE) }
+    prefsDraft?.edit()?.let {
+       // nextId = prefsDraft?.getLong("nextId", 1L)!!
+    } */
+
     init {
         val file = context.filesDir.resolve(filename)
         if (file.exists()) {

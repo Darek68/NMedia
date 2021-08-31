@@ -34,7 +34,7 @@ class PostFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // val binding = CardPostBinding.inflate(
+
         val binding = FragmentPostBinding.inflate(
             inflater,
             container,
@@ -50,13 +50,7 @@ class PostFragment : Fragment() {
             ).show()
             return binding.root
         }
-        /* Toast.makeText(
-             context,
-             "id = " + id.toString(),
-             Toast.LENGTH_SHORT
-         ).show() */
-        //  val post = getPostById(id)
-        //  binding.content.setText(viewModel.edited.value?.content)
+
         viewModel.data.observe(viewLifecycleOwner) { posts ->
             posts.map {post ->
                 if (post.id == id) {
@@ -76,14 +70,7 @@ class PostFragment : Fragment() {
                 }
             }
         }
-        /* if (thisPost == null) {
-             Toast.makeText(
-                 context,
-                 "Не найден пост!",
-                 Toast.LENGTH_SHORT
-             ).show()
-            // findNavController().popBackStack()
-         } */
+
         binding.post.menu.setOnClickListener {
             PopupMenu(it.context, it).apply {
                 inflate(R.menu.post_options)
@@ -120,13 +107,19 @@ class PostFragment : Fragment() {
             }.show()
         }
 
-
+        binding.post.like.setOnClickListener{
+            thisPost?.let { post -> viewModel.likeById(post.id) }
+        }
+        binding.post.share.setOnClickListener{
+            val intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, thisPost?.content)
+                type = "text/plain"
+            }
+            thisPost?.let { post -> viewModel.shareById(post.id) }
+            val shareIntent = Intent.createChooser(intent, getString(R.string.chooser_share_post))
+            startActivity(shareIntent)
+        }
         return binding.root
     }
-    /*  fun getPostById(id: Long): Post {
-          posts = posts.map {
-              if (it.id != id) it else it.copy(likedByMe = !it.likedByMe)
-          }
-          return post
-      } */
 }

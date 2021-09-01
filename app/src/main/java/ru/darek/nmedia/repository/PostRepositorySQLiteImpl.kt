@@ -5,7 +5,6 @@ import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import ru.darek.nmedia.dao.PostDao
-import ru.darek.nmedia.dao.PostDaoImpl
 import ru.darek.nmedia.dto.Post
 
 class PostRepositorySQLiteImpl(
@@ -15,14 +14,14 @@ class PostRepositorySQLiteImpl(
     private val data = MutableLiveData(posts)
 
     init {
-        posts = dao.getAll()
+       // posts = dao.getAll()
         data.value = posts
     }
 
     override fun getAll(): LiveData<List<Post>> = data
 
     override fun save(post: Post) {
-        val id = post.id
+      /*  val id = post.id
         val saved = dao.save(post)
         posts = if (id == 0L) {
             listOf(saved) + posts
@@ -30,7 +29,7 @@ class PostRepositorySQLiteImpl(
             posts.map {
                 if (it.id != id) it else saved
             }
-        }
+        } */
         data.value = posts
     }
 

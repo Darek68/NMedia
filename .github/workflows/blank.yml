@@ -19,6 +19,7 @@ jobs:
            FIREBASE_CONFIG: ${{ secrets.FIREBASE_SECRET }}
         run: |
           chmod +x ./gradlew
+          echo $FIREBASE_CONFIG > app/google-services.json
           ./gradlew build --info
 
       - name: Upload Build Artifact

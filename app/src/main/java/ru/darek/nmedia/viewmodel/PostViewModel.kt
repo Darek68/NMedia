@@ -2,6 +2,7 @@ package ru.darek.nmedia.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
 //import androidx.lifecycle.AndroidViewModel
 import ru.darek.nmedia.db.AppDb
@@ -57,8 +58,14 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun save() {
         edited.value?.let {
+            //_postCreated.postValue(Unit)
             thread {
-                repository.save(it)
+                try {
+                    repository.save(it)
+                } catch (e: IOException) {
+                    Log.d("TEST_ERROR",  e.message.toString())
+                    FeedModel(error = true)
+                }
                 _postCreated.postValue(Unit)
             }
         }

@@ -8,8 +8,7 @@ import ru.darek.nmedia.db.AppDb
 import ru.darek.nmedia.dto.Post
 import ru.darek.nmedia.model.FeedModel
 import ru.darek.nmedia.repository.*
-//import ru.darek.nmedia.util.SingleLiveEvent
-import ru.darek.nmedia.util.*
+import ru.darek.nmedia.util.SingleLiveEvent
 import java.io.IOException
 import kotlin.concurrent.thread
 import java.io.Closeable

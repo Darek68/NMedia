@@ -37,7 +37,18 @@ class FCMService : FirebaseMessagingService() {
    override fun onMessageReceived(message: RemoteMessage) {
 
        message.data[action]?.let {
-           try {
+           val name = when (message.data[action]){
+               "LIKE" -> "LIKE"
+               "NEWPOST" -> "NEWPOST"
+               else -> "OTHER"
+           }
+           when (Action.values().first() {it.name == name}){
+               Action.LIKE -> handleLike(gson.fromJson(message.data[content],Like::class.java))
+               Action.NEWPOST -> handlePost(gson.fromJson(message.data[content],NewPost::class.java))
+               else -> handleUnknown(it)
+           }
+
+          /* try {
            val enum = Action.valueOf(it)
                when (enum) {
                    Action.LIKE -> handleLike(gson.fromJson(message.data[content],
@@ -48,7 +59,7 @@ class FCMService : FirebaseMessagingService() {
            } catch (e: IllegalArgumentException) {
                handleUnknown(it)
                return@let
-           }
+           } */
        }
    }
     private fun handleUnknown(unknow: String) {
@@ -107,7 +118,7 @@ class FCMService : FirebaseMessagingService() {
 }
 
 enum class Action {
-    LIKE,NEWPOST
+    LIKE,NEWPOST,OTHER
 }
 
 data class Like(

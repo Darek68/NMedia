@@ -25,7 +25,6 @@ private val empty = Post(
     video = ""
 )
 
-
 class PostViewModel(application: Application) : AndroidViewModel(application) {
     // упрощённый вариант
     private val repository: PostRepository = PostRepositoryImpl()

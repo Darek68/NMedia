@@ -51,8 +51,10 @@ class PostFragment : Fragment() {
             return binding.root
         }
 
-        viewModel.data.observe(viewLifecycleOwner) { posts ->
-            posts.map {post ->
+       /* viewModel.data.observe(viewLifecycleOwner) { posts ->
+            posts.map {post -> */
+        viewModel.data.observe(viewLifecycleOwner) { data ->
+            data.posts.map {post ->
                 if (post.id == id) {
                     thisPost = post
                     binding.post.apply {

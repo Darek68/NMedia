@@ -6,6 +6,8 @@ import ru.darek.nmedia.dao.PostDao
 import ru.darek.nmedia.dto.Post
 import ru.darek.nmedia.entity.PostEntity
 
+
+/* old version.. */
 class PostRepositoryImpl(
     private val dao: PostDao,
 ) : PostRepository {

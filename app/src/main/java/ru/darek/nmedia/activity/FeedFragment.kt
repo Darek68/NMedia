@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import android.widget.Toast.makeText
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
@@ -97,12 +98,19 @@ class FeedFragment : Fragment() {
             }
         })
         binding.list.adapter = adapter
-        viewModel.data.observe(viewLifecycleOwner) { posts ->
+        viewModel.data.observe(viewLifecycleOwner, { state ->
+            adapter.submitList(state.posts)
+            binding.progress.isVisible = state.loading
+            binding.errorGroup.isVisible = state.error
+            binding.emptyText.isVisible = state.empty
+        })
+       /* viewModel.data.observe(viewLifecycleOwner) { posts ->
             adapter.submitList(posts)
           /*  list.submitList {
                 list.smoothScrolltoPosition(0)
             } */
-        }
+        } */
+
 
         binding.fab.setOnClickListener {
             val bundle = Bundle().apply {

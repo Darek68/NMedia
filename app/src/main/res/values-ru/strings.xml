@@ -23,4 +23,7 @@
     <string name="channel_remote_name">Имя канала</string>
     <string name="channel_remote_description">Описание канала</string>
     <string name="notification_unknow">Сообщение неизвестного типа: %1$s</string>
+    <string name="retry_loading">Повторить</string>
+    <string name="empty_posts">Постов нет.\nЕсли создадите новый пост, то он появится здесь</string>
+    <string name="error_loading">Что-то пошло не так. Попробуйте позднее</string>
 </resources>

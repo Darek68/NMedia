@@ -37,23 +37,6 @@ class NewPostFragment : Fragment() {
       val edit = arguments?.getBoolean("edit") == true
         // This callback will only be called when MyFragment is at least Started.
         val prefsDraft = context?.getSharedPreferences("myDrafts", Context.MODE_PRIVATE)
-        val callback = requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-           // Snackbar.make(binding.root, "Начало..", Snackbar.LENGTH_SHORT).show()
-            if (!edit) {
-                prefsDraft?.edit()?.let {
-                    it.putString("content", binding.edit.text.toString())
-                    it.apply()
-                }
-            }
-           /* Toast.makeText(
-                context,
-                prefs?.getString("content", "Введите текст"),
-                Toast.LENGTH_SHORT
-            ).show() */
-            AndroidUtils.hideKeyboard(requireView())
-            findNavController().popBackStack()
-        }
-
         // для редактирования берем content из bundlу, для нового - из SharedPref
         if (edit) {
             arguments?.getString("content").let {  binding.edit.setText(it) }
@@ -69,16 +52,16 @@ class NewPostFragment : Fragment() {
                 }
             }
             AndroidUtils.hideKeyboard(requireView())
-            viewModel.postCreated.observe(viewLifecycleOwner) {
-                Toast.makeText(
-                    context,
-                    "viewModel.postCreated.observe",
-                    Toast.LENGTH_SHORT
-                ).show()
-                viewModel.loadPosts()
-                findNavController().navigateUp()
-            }
-            findNavController().popBackStack()
+           // findNavController().popBackStack()
+        }
+        viewModel.postCreated.observe(viewLifecycleOwner) {
+           /* Toast.makeText(
+                context,
+                "viewModel.postCreated.observe",
+                Toast.LENGTH_SHORT
+            ).show() */
+            viewModel.loadPosts()
+            findNavController().navigateUp()
         }
         return binding.root
     }

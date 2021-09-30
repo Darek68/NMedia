@@ -73,7 +73,7 @@ class FeedFragment : Fragment() {
                 startActivity(shareIntent)
             }
             override fun onVideo(post: Post) {
-                if (post.video.isBlank()) {
+                if (post.video.isNullOrBlank()) {
                     Toast.makeText(
                         context,
                         "Нечего проигрывать!",

@@ -48,7 +48,7 @@ class PostViewHolder(
             like.text = getStrCnt(post.likes)
             share.text = getStrCnt(post.share)
             views.text = getStrCnt(post.views)
-            group.visibility =  if (post.video.isBlank()) View.GONE else View.VISIBLE
+            group.visibility =  if (post.video.isNullOrBlank()) View.GONE else View.VISIBLE
            /* like.setImageResource(
                 if (post.likedByMe) R.drawable.ic_liked_24 else R.drawable.ic_like_24
             ) */

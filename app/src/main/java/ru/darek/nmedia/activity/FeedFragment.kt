@@ -102,8 +102,8 @@ class FeedFragment : Fragment() {
             adapter.submitList(state.posts)
             binding.progress.isVisible = state.loading
             binding.errorGroup.isVisible = state.error
-           // binding.emptyText.isVisible = state.empty
-            binding.emptyText.isVisible = state.posts.isEmpty()
+            binding.emptyText.isVisible = state.empty
+           // binding.emptyText.isVisible = state.posts.isEmpty()
         })
        /* viewModel.data.observe(viewLifecycleOwner) { posts ->
             adapter.submitList(posts)

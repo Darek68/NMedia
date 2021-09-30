@@ -29,7 +29,8 @@ class PostRepositoryImpl: PostRepository {
 
     override fun getAll(): List<Post> {
         val request: Request = Request.Builder()
-            .url("${BASE_URL}/api/slow/posts")
+            //.url("${BASE_URL}/api/slow/posts")
+            .url("${BASE_URL}/api/posts")
             .build()
 
         return client.newCall(request)
@@ -41,16 +42,36 @@ class PostRepositoryImpl: PostRepository {
     }
 
     override fun likeById(id: Long) {
-        // TODO: do this in homework
+        //POST /api/posts/{id}/likes
+        val request: Request = Request.Builder()
+            .post(gson.toJson(id).toRequestBody(jsonType))
+            .url("${BASE_URL}/api/posts/$id/likes")
+            .build()
+
+        client.newCall(request)
+            .execute()
+            .close()
+    }
+    override fun unlikeById(id: Long) {
+        //DELETE /api/posts/{id}/likes
+        val request: Request = Request.Builder()
+            .delete()
+            .url("${BASE_URL}/api/posts/$id/likes")
+            .build()
+
+        client.newCall(request)
+            .execute()
+            .close()
     }
     override fun shareById(id: Long) {
-        // TODO: do this in homework
+        // эта опция не реализована на сервере..
     }
 
     override fun save(post: Post) {
         val request: Request = Request.Builder()
             .post(gson.toJson(post).toRequestBody(jsonType))
-            .url("${BASE_URL}/api/slow/posts")
+            //.url("${BASE_URL}/api/slow/posts")
+            .url("${BASE_URL}/api/posts")
             .build()
 
         client.newCall(request)

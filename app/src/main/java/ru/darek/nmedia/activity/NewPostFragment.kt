@@ -62,8 +62,6 @@ class NewPostFragment : Fragment() {
         binding.ok.setOnClickListener {
             viewModel.changeContent(binding.edit.text.toString())
             viewModel.save()
-            //prefsDraft?.edit()?.clear() не работает
-            //prefsDraft?.edit()?.remove("content")  не работает
             if (!edit) {
                 prefsDraft?.edit()?.let {
                     it.putString("content", "")
@@ -71,7 +69,15 @@ class NewPostFragment : Fragment() {
                 }
             }
             AndroidUtils.hideKeyboard(requireView())
-            //findNavController().navigateUp()
+            viewModel.postCreated.observe(viewLifecycleOwner) {
+                Toast.makeText(
+                    context,
+                    "viewModel.postCreated.observe",
+                    Toast.LENGTH_SHORT
+                ).show()
+                viewModel.loadPosts()
+                findNavController().navigateUp()
+            }
             findNavController().popBackStack()
         }
         return binding.root

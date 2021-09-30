@@ -58,7 +58,6 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun save() {
         edited.value?.let {
-            //_postCreated.postValue(Unit)
             thread {
                 try {
                     repository.save(it)

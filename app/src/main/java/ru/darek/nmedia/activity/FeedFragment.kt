@@ -37,9 +37,7 @@ class FeedFragment : Fragment() {
             container,
             false
         )
-      /*  binding.list.submitList {
-            binding.list.smoothScrolltoPosition(0)
-        } */
+
         val adapter = PostsAdapter(object : PostCallback {
             override fun onEdit(post: Post) {
                 viewModel.edit(post)
@@ -105,13 +103,6 @@ class FeedFragment : Fragment() {
             binding.emptyText.isVisible = state.empty
            // binding.emptyText.isVisible = state.posts.isEmpty()
         })
-       /* viewModel.data.observe(viewLifecycleOwner) { posts ->
-            adapter.submitList(posts)
-          /*  list.submitList {
-                list.smoothScrolltoPosition(0)
-            } */
-        } */
-
 
         binding.fab.setOnClickListener {
             val bundle = Bundle().apply {

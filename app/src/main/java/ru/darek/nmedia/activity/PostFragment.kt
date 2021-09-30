@@ -64,7 +64,8 @@ class PostFragment : Fragment() {
                         like.text = getStrCnt(post.likes)
                         share.text = getStrCnt(post.share)
                         views.text = getStrCnt(post.views)
-                        group.visibility = if (post.video.isBlank()) View.GONE else View.VISIBLE
+                        //group.visibility = if (post.video.isBlank()) View.GONE else View.VISIBLE
+                        group.visibility =  if (post.video.isNullOrBlank()) View.GONE else View.VISIBLE
                         like.setIconTintResource(if (post.likedByMe) R.color.red else R.color.grey)
                         like.isChecked = post.likedByMe
 

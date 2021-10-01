@@ -10,9 +10,6 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.messaging.FirebaseMessaging
 
-//import ru.darek.nmedia.activity.NewPostFragment.Companion.textArg
-
-
 class AppActivity : AppCompatActivity(R.layout.activity_app) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,15 +25,11 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
                 return@let
             }
             intent.removeExtra(Intent.EXTRA_TEXT)
-          /*  findNavController(R.id.nav_host_fragment).navigate(
-                R.id.action_feedFragment_to_newPostFragment,
-                Bundle().apply {
-                    textArg = text
-                }
-            ) */
+
         }
         checkGoogleApiAvailability()
     }
+
     private fun checkGoogleApiAvailability() {
         with(GoogleApiAvailability.getInstance()) {
             val code = isGooglePlayServicesAvailable(this@AppActivity)

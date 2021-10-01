@@ -1,4 +1,4 @@
- package ru.darek.nmedia.activity
+package ru.darek.nmedia.activity
 
 import android.content.Context
 import android.os.Bundle
@@ -27,19 +27,19 @@ class NewPostFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         val binding = FragmentNewPostBinding.inflate(
             inflater,
             container,
             false
         )
-      val edit = arguments?.getBoolean("edit") == true
+        val edit = arguments?.getBoolean("edit") == true
         // This callback will only be called when MyFragment is at least Started.
         val prefsDraft = context?.getSharedPreferences("myDrafts", Context.MODE_PRIVATE)
         // для редактирования берем content из bundlу, для нового - из SharedPref
         if (edit) {
-            arguments?.getString("content").let {  binding.edit.setText(it) }
+            arguments?.getString("content").let { binding.edit.setText(it) }
         } else binding.edit.setText(prefsDraft?.getString("content", ""))
 
         binding.ok.setOnClickListener {
@@ -52,14 +52,14 @@ class NewPostFragment : Fragment() {
                 }
             }
             AndroidUtils.hideKeyboard(requireView())
-           // findNavController().popBackStack()
+            // findNavController().popBackStack()
         }
         viewModel.postCreated.observe(viewLifecycleOwner) {
-           /* Toast.makeText(
-                context,
-                "viewModel.postCreated.observe",
-                Toast.LENGTH_SHORT
-            ).show() */
+            /* Toast.makeText(
+                 context,
+                 "viewModel.postCreated.observe",
+                 Toast.LENGTH_SHORT
+             ).show() */
             viewModel.loadPosts()
             findNavController().navigateUp()
         }

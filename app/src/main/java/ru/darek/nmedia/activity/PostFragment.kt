@@ -32,7 +32,7 @@ class PostFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
 
         val binding = FragmentPostBinding.inflate(
@@ -51,10 +51,8 @@ class PostFragment : Fragment() {
             return binding.root
         }
 
-       /* viewModel.data.observe(viewLifecycleOwner) { posts ->
-            posts.map {post -> */
         viewModel.data.observe(viewLifecycleOwner) { data ->
-            data.posts.map {post ->
+            data.posts.map { post ->
                 if (post.id == id) {
                     thisPost = post
                     binding.post.apply {
@@ -65,7 +63,8 @@ class PostFragment : Fragment() {
                         share.text = getStrCnt(post.share)
                         views.text = getStrCnt(post.views)
                         //group.visibility = if (post.video.isBlank()) View.GONE else View.VISIBLE
-                        group.visibility =  if (post.video.isNullOrBlank()) View.GONE else View.VISIBLE
+                        group.visibility =
+                            if (post.video.isNullOrBlank()) View.GONE else View.VISIBLE
                         like.setIconTintResource(if (post.likedByMe) R.color.red else R.color.grey)
                         like.isChecked = post.likedByMe
 
@@ -93,8 +92,8 @@ class PostFragment : Fragment() {
 
                         R.id.post_edit -> {
                             val bundle = Bundle().apply {
-                                putString("content",thisPost!!.content)
-                                putBoolean("edit",true) // признак редактирования
+                                putString("content", thisPost!!.content)
+                                putBoolean("edit", true) // признак редактирования
                             }
                             //viewModel.edited.value = thisPost
                             viewModel.edit(thisPost!!)
@@ -110,10 +109,10 @@ class PostFragment : Fragment() {
             }.show()
         }
 
-        binding.post.like.setOnClickListener{
+        binding.post.like.setOnClickListener {
             thisPost?.let { post -> viewModel.likeById(post.id) }
         }
-        binding.post.share.setOnClickListener{
+        binding.post.share.setOnClickListener {
             val intent = Intent().apply {
                 action = Intent.ACTION_SEND
                 putExtra(Intent.EXTRA_TEXT, thisPost?.content)

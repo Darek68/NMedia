@@ -30,7 +30,7 @@ class FeedFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         val binding = FragmentFeedBinding.inflate(
             inflater,
@@ -42,8 +42,8 @@ class FeedFragment : Fragment() {
             override fun onEdit(post: Post) {
                 viewModel.edit(post)
                 val bundle = Bundle().apply {
-                    putString("content",post.content)
-                    putBoolean("edit",true) // признак редактирования
+                    putString("content", post.content)
+                    putBoolean("edit", true) // признак редактирования
                 }
                 findNavController().navigate(
                     R.id.action_feedFragment_to_newPostFragment,
@@ -70,6 +70,7 @@ class FeedFragment : Fragment() {
                     Intent.createChooser(intent, getString(R.string.chooser_share_post))
                 startActivity(shareIntent)
             }
+
             override fun onVideo(post: Post) {
                 if (post.video.isNullOrBlank()) {
                     Toast.makeText(
@@ -80,13 +81,14 @@ class FeedFragment : Fragment() {
                     return
                 }
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(post.video))
-                val videoIntent = Intent.createChooser(intent, getString(R.string.chooser_video_player))
+                val videoIntent =
+                    Intent.createChooser(intent, getString(R.string.chooser_video_player))
                 startActivity(videoIntent)
             }
 
             override fun onContent(post: Post) {
                 val bundle = Bundle().apply {
-                    putLong("id",post.id)
+                    putLong("id", post.id)
                 }
                 viewModel.edited.value = post
                 findNavController().navigate(
@@ -101,12 +103,12 @@ class FeedFragment : Fragment() {
             binding.progress.isVisible = state.loading
             binding.errorGroup.isVisible = state.error
             binding.emptyText.isVisible = state.empty
-           // binding.emptyText.isVisible = state.posts.isEmpty()
+            // binding.emptyText.isVisible = state.posts.isEmpty()
         })
 
         binding.fab.setOnClickListener {
             val bundle = Bundle().apply {
-                putString("content","Укажите текст поста..")
+                putString("content", "Укажите текст поста..")
             }
             findNavController().navigate(
                 R.id.action_feedFragment_to_newPostFragment,

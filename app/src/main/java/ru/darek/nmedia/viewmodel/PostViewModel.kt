@@ -68,8 +68,70 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             }
         })
     }
-
+    fun likeById(id: Long) {
+        val oldPost = _data.value?.posts?.last { it.id == id }
+            if (oldPost != null) {
+                if (oldPost.likedByMe){
+                    repository.unlikeByIdAsync(id,object : PostRepository.SaveCallback {
+                        override fun onSuccess(newPost: Post) {
+                            _data.postValue(
+                                _data.value?.copy(posts = _data.value?.posts.orEmpty()
+                                    .map {
+                                        if (it.id == newPost.id) {
+                                            newPost
+                                        } else it
+                                    }
+                                )
+                            )
+                        }
+                        override fun onError(e: Exception) {
+                            _data.postValue(FeedModel(error = true))
+                        }
+                    })
+                }
+                else {
+                    repository.likeByIdAsync(id,object : PostRepository.SaveCallback {
+                        override fun onSuccess(newPost: Post) {
+                            _data.postValue(
+                                _data.value?.copy(posts = _data.value?.posts.orEmpty()
+                                    .map {
+                                        if (it.id == newPost.id) {
+                                            newPost
+                                        } else it
+                                    }
+                                )
+                            )
+                        }
+                        override fun onError(e: Exception) {
+                            _data.postValue(FeedModel(error = true))
+                        }
+                    })
+                }
+            }
+    }
     fun save() {
+        edited.value?.let {
+            //  val oldPost = _data.value?.posts?.last { it.id == id }
+            repository.saveAsync(it, object : PostRepository.SaveCallback {
+                override fun onSuccess(newPost: Post) {
+                    _data.postValue(
+                        _data.value?.copy(posts = _data.value?.posts.orEmpty()
+                            .map {
+                                if (it.id == newPost.id) {
+                                    newPost
+                                } else it
+                            }
+                        )
+                    )
+                }
+                override fun onError(e: Exception) {
+                    _data.postValue(FeedModel(error = true))
+                }
+            })
+            edited.value = empty
+        }
+    }
+    fun saveOld() {
         edited.value?.let {
             thread {
                 try {
@@ -96,7 +158,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         edited.value = edited.value?.copy(content = text)
     }
 
-    fun likeById(id: Long) {
+    fun likeByIdOld(id: Long) {
         val post = _data.value?.posts?.last { it.id == id }
         thread {
             if (post != null) {

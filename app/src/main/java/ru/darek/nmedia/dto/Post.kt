@@ -1,4 +1,4 @@
-package ru.darek.nmedia. dto
+package ru.darek.nmedia.dto
 
 data class Post(
     val id: Long,

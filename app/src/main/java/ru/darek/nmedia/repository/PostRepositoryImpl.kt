@@ -82,8 +82,8 @@ class PostRepositoryImpl: PostRepository {
                 override fun onResponse(call: Call, response: Response) {
                     val body = response.body?.string() ?: error("body is null") //throw RuntimeException("body is null")
                     try {
-                        //callback.onSuccess(gson.fromJson(body, typeToken.type))
-                        callback.onSuccess(gson.fromJson(response.body?.string(), Post::class.java))
+                        val model = gson.fromJson(body, Post::class.java)
+                        callback.onSuccess(model)
                     } catch (e: Exception) {
                         callback.onError(e)
                     }
@@ -117,8 +117,8 @@ class PostRepositoryImpl: PostRepository {
                 override fun onResponse(call: Call, response: Response) {
                     val body = response.body?.string() ?: error("body is null") //throw RuntimeException("body is null")
                     try {
-                        //callback.onSuccess(gson.fromJson(body, typeToken.type))
-                        callback.onSuccess(gson.fromJson(response.body?.string(), Post::class.java))
+                        val model = gson.fromJson(body, Post::class.java)
+                        callback.onSuccess(model)
                     } catch (e: Exception) {
                         callback.onError(e)
                     }
@@ -152,8 +152,8 @@ class PostRepositoryImpl: PostRepository {
                 override fun onResponse(call: Call, response: Response) {
                     val body = response.body?.string() ?: error("body is null") //throw RuntimeException("body is null")
                     try {
-                        //callback.onSuccess(gson.fromJson(body, typeToken.type))
-                        callback.onSuccess(gson.fromJson(response.body?.string(), Post::class.java))
+                        val model = gson.fromJson(body, Post::class.java)
+                        callback.onSuccess(model)
                     } catch (e: Exception) {
                         callback.onError(e)
                     }

@@ -128,8 +128,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                     _data.postValue(FeedModel(error = true))
                 }
             })
-            edited.value = empty
+            _postCreated.postValue(Unit)
         }
+        edited.value = empty
     }
     fun saveOld() {
         edited.value?.let {

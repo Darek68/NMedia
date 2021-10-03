@@ -21,4 +21,9 @@ interface PostRepository {
         fun onSuccess(post: Post) {}
         fun onError(e: Exception) {}
     }
+    fun removeByIdAsync(id: Long,callback: DeleteCallback)
+    interface DeleteCallback {
+        fun onSuccess() {}
+        fun onError(e: Exception) {}
+    }
 }

@@ -168,8 +168,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
-
-    fun removeById(id: Long) {
+    fun removeByIdOld(id: Long) {
         thread {
             // Оптимистичная модель
             val old = _data.value?.posts.orEmpty()
@@ -183,6 +182,23 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             } catch (e: IOException) {
                 _data.postValue(_data.value?.copy(posts = old))
             }
+        }
+    }
+    fun removeById(id: Long) {
+        val old = _data.value?.posts.orEmpty()
+        try {
+            //repository.removeById(id)
+            _data.value = FeedModel(loading = true)
+            repository.removeByIdAsync(id, object : PostRepository.DeleteCallback {
+                override fun onSuccess() {
+                    loadPosts()
+                }
+                override fun onError(e: Exception) {
+                    _data.postValue(FeedModel(error = true))
+                }
+            })
+        } catch (e: IOException) {
+            _data.postValue(_data.value?.copy(posts = old))
         }
     }
 

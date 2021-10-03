@@ -57,7 +57,8 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     } */
 
     fun loadPosts() {
-        _data.value = FeedModel(loading = true)
+        // _data.value = FeedModel(loading = true)
+        _data.postValue(FeedModel(loading = true))
         repository.getAllAsync(object : PostRepository.GetAllCallback {
             override fun onSuccess(posts: List<Post>) {
                 _data.postValue(FeedModel(posts = posts, empty = posts.isEmpty()))

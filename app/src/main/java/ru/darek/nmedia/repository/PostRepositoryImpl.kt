@@ -35,20 +35,6 @@ class PostRepositoryImpl: PostRepository {
         private val jsonType = "application/json".toMediaType()
     }
 
-    override fun getAll(): List<Post> {
-        val request: Request = Request.Builder()
-            //.url("${BASE_URL}/api/slow/posts")
-            .url("${BASE_URL}/api/posts")
-            .build()
-
-        return client.newCall(request)
-            .execute()
-            .let { it.body?.string() ?: throw RuntimeException("body is null") }
-            .let {
-                gson.fromJson(it, typeToken.type)
-            }
-    }
-
     override fun getAllAsync(callback: PostRepository.GetAllCallback) {
         val request: Request = Request.Builder()
             //.url("${BASE_URL}/api/slow/posts")
@@ -95,17 +81,7 @@ class PostRepositoryImpl: PostRepository {
                 }
             })
     }
-    override fun likeById(id: Long) {
-        //POST /api/posts/{id}/likes
-        val request: Request = Request.Builder()
-            .post(gson.toJson(id).toRequestBody()) // .post(gson.toJson(id).toRequestBody(jsonType))
-            .url("${BASE_URL}/api/posts/$id/likes")
-            .build()
 
-        client.newCall(request)
-            .execute()
-            .close()
-    }
     override fun unlikeByIdAsync(id: Long,callback: PostRepository.SaveCallback) {
         //DELETE /api/posts/{id}/likes
         val request: Request = Request.Builder()
@@ -130,17 +106,7 @@ class PostRepositoryImpl: PostRepository {
                 }
             })
     }
-    override fun unlikeById(id: Long) {
-        //DELETE /api/posts/{id}/likes
-        val request: Request = Request.Builder()
-            .delete()
-            .url("${BASE_URL}/api/posts/$id/likes")
-            .build()
 
-        client.newCall(request)
-            .execute()
-            .close()
-    }
     override fun saveAsync(post: Post,callback: PostRepository.SaveCallback) {
         val request: Request = Request.Builder()
             .post(gson.toJson(post).toRequestBody(jsonType))
@@ -168,7 +134,8 @@ class PostRepositoryImpl: PostRepository {
     override fun removeByIdAsync(id: Long,callback: PostRepository.DeleteCallback) {
         val request: Request = Request.Builder()
             .delete()
-            .url("${BASE_URL}/api/slow/posts/$id")
+            //.url("${BASE_URL}/api/slow/posts/$id")
+            .url("${BASE_URL}/api/posts/$id")
             .build()
 
         client.newCall(request)
@@ -185,6 +152,45 @@ class PostRepositoryImpl: PostRepository {
                 }
             })
     }
+
+    override fun shareById(id: Long) {
+        // эта опция не реализована на сервере..
+    }
+    override fun getAll(): List<Post> {
+        val request: Request = Request.Builder()
+            //.url("${BASE_URL}/api/slow/posts")
+            .url("${BASE_URL}/api/posts")
+            .build()
+
+        return client.newCall(request)
+            .execute()
+            .let { it.body?.string() ?: throw RuntimeException("body is null") }
+            .let {
+                gson.fromJson(it, typeToken.type)
+            }
+    }
+    override fun likeById(id: Long) {
+        //POST /api/posts/{id}/likes
+        val request: Request = Request.Builder()
+            .post(gson.toJson(id).toRequestBody()) // .post(gson.toJson(id).toRequestBody(jsonType))
+            .url("${BASE_URL}/api/posts/$id/likes")
+            .build()
+
+        client.newCall(request)
+            .execute()
+            .close()
+    }
+    override fun unlikeById(id: Long) {
+        //DELETE /api/posts/{id}/likes
+        val request: Request = Request.Builder()
+            .delete()
+            .url("${BASE_URL}/api/posts/$id/likes")
+            .build()
+
+        client.newCall(request)
+            .execute()
+            .close()
+    }
     override fun save(post: Post) {
         val request: Request = Request.Builder()
             .post(gson.toJson(post).toRequestBody(jsonType))
@@ -196,19 +202,16 @@ class PostRepositoryImpl: PostRepository {
             .execute()
             .close()
     }
-
     override fun removeById(id: Long) {
         val request: Request = Request.Builder()
             .delete()
-            .url("${BASE_URL}/api/slow/posts/$id")
+            //.url("${BASE_URL}/api/slow/posts/$id")
+            .url("${BASE_URL}/api/posts/$id")
             .build()
 
         client.newCall(request)
             .execute()
             .close()
-    }
-    override fun shareById(id: Long) {
-        // эта опция не реализована на сервере..
     }
 }
 

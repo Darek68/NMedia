@@ -8,6 +8,7 @@ import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import ru.darek.nmedia.R
 import ru.darek.nmedia.databinding.CardPostBinding
 import ru.darek.nmedia.dto.Post
@@ -40,6 +41,8 @@ class PostViewHolder(
     private val binding: CardPostBinding,
     private val postCallbeck: PostCallback
 ) : RecyclerView.ViewHolder(binding.root) {
+   // private val urls = listOf("netology.jpg", "sber.jpg", "tcs.jpg", "404.png")
+   // private var index = 0
     fun bind(post: Post) {
         binding.apply {
             author.text = post.author
@@ -55,6 +58,15 @@ class PostViewHolder(
            // like.setIconResource(if (post.likedByMe) R.drawable.ic_liked_24 else R.drawable.ic_like_24)
             like.setIconTintResource(if (post.likedByMe) R.color.red else R.color.grey)
             like.isChecked = post.likedByMe
+            val url = "http://10.0.2.2:9999/avatars/${post.authorAvatar}"
+            Glide.with(avatar)
+                .load(url)
+                .placeholder(R.drawable.ic_loading_100dp)
+                .error(R.drawable.ic_error_100dp)
+                .circleCrop()
+                .timeout(10_000)
+                .into(avatar)
+
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
                     inflate(R.menu.post_options)

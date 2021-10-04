@@ -11,6 +11,7 @@ import ru.darek.nmedia.model.FeedModel
 import ru.darek.nmedia.repository.*
 import ru.darek.nmedia.util.SingleLiveEvent
 import java.io.IOException
+import ru.darek.nmedia.R
 import kotlin.concurrent.thread
 import java.io.Closeable
 
@@ -18,7 +19,7 @@ private val empty = Post(
     id = 0,
     content = "",
     author = "",
-    authorAvatar = "",
+    authorAvatar = "404.png",
     likedByMe = false,
     published = "",
     likes = 0,
@@ -40,6 +41,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     init {
         loadPosts()
+
     }
 
     fun loadPosts() {

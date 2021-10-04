@@ -12,6 +12,7 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import ru.darek.nmedia.R
 import ru.darek.nmedia.adapter.PostCallback
 import ru.darek.nmedia.adapter.PostsAdapter
@@ -24,7 +25,8 @@ import ru.darek.nmedia.util.AndroidUtils.getStrCnt
 import ru.darek.nmedia.viewmodel.PostViewModel
 
 class PostFragment : Fragment() {
-
+   // private val urls = listOf("netology.jpg", "sber.jpg", "tcs.jpg", "404.png")
+    //private var index = 0
     private val viewModel: PostViewModel by viewModels(
         ownerProducer = ::requireParentFragment
     )
@@ -69,6 +71,14 @@ class PostFragment : Fragment() {
                         like.isChecked = post.likedByMe
 
                     }
+                    val url = "http://10.0.2.2:9999/avatars/${post.authorAvatar}"
+                    Glide.with(binding.post.avatar)
+                        .load(url)
+                        .placeholder(R.drawable.ic_loading_100dp)
+                        .error(R.drawable.ic_error_100dp)
+                        .circleCrop()
+                        .timeout(10_000)
+                        .into(binding.post.avatar)
                 }
             }
         }

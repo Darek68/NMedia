@@ -1,24 +1,100 @@
 package ru.darek.nmedia.repository
 
 
-import androidx.lifecycle.Transformations
-import ru.darek.nmedia.dao.PostDao
-import ru.darek.nmedia.dto.Post
-import ru.darek.nmedia.entity.PostEntity
-
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import okhttp3.*
 //import okhttp3.Callback
-import okhttp3.MediaType.Companion.toMediaType
 //import okhttp3.OkHttpClient
 //import okhttp3.Request
-import okhttp3.RequestBody.Companion.toRequestBody
-import okhttp3.logging.HttpLoggingInterceptor
-import java.io.IOException
+
 import java.util.concurrent.TimeUnit
 
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import ru.darek.nmedia.api.*
+import ru.darek.nmedia.dto.Post
+import java.lang.RuntimeException
 
+class PostRepositoryImpl : PostRepository {
+
+    override fun getAllAsync(callback: PostRepository.Callback<List<Post>>) {
+        PostsApi.retrofitService.getAll().enqueue(object : Callback<List<Post>> {
+            override fun onResponse(call: Call<List<Post>>, response: Response<List<Post>>) {
+                if (!response.isSuccessful) {
+                    callback.onError(RuntimeException(response.message()))
+                    return
+                }
+                callback.onSuccess(response.body() ?: throw RuntimeException("body is null"))
+            }
+            override fun onFailure(call: Call<List<Post>>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+        })
+    }
+
+    override fun save(post: Post, callback: PostRepository.Callback<Post>) {
+        PostsApi.retrofitService.save(post).enqueue(object : Callback<Post> {
+            override fun onResponse(call: Call<Post>, response: Response<Post>) {
+                if (!response.isSuccessful) {
+                    callback.onError(RuntimeException(response.message()))
+                    return
+                }
+                callback.onSuccess(response.body() ?: throw RuntimeException("body is null"))
+            }
+            override fun onFailure(call: Call<Post>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+        })
+    }
+
+    override fun removeById(id: Long, callback: PostRepository.Callback<Unit>) {
+        PostsApi.retrofitService.removeById(id).enqueue(object : Callback<Unit> {
+            override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
+                if (!response.isSuccessful) {
+                    callback.onError(RuntimeException(response.message()))
+                    return
+                }
+                callback.onSuccess(response.body() ?: throw RuntimeException("body is null"))
+            }
+            override fun onFailure(call: Call<Unit>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+        })
+    }
+
+    override fun likeById(id: Long, callback: PostRepository.Callback<Post>) {
+        PostsApi.retrofitService.likeById(id).enqueue(object : Callback<Post> {
+            override fun onResponse(call: Call<Post>, response: Response<Post>) {
+                if (!response.isSuccessful) {
+                    callback.onError(RuntimeException(response.message()))
+                    return
+                }
+                callback.onSuccess(response.body() ?: throw RuntimeException("body is null"))
+            }
+            override fun onFailure(call: Call<Post>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+        })
+    }
+
+    override fun unlikeById(id: Long, callback: PostRepository.Callback<Post>) {
+        PostsApi.retrofitService.dislikeById(id).enqueue(object : Callback<Post> {
+            override fun onResponse(call: Call<Post>, response: Response<Post>) {
+                if (!response.isSuccessful) {
+                    callback.onError(RuntimeException(response.message()))
+                    return
+                }
+                callback.onSuccess(response.body() ?: throw RuntimeException("body is null"))
+            }
+            override fun onFailure(call: Call<Post>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+        })
+    }
+
+}
+
+
+/*
 class PostRepositoryImpl: PostRepository {
     private val client = OkHttpClient.Builder()
         .addInterceptor (HttpLoggingInterceptor().apply {
@@ -36,6 +112,8 @@ class PostRepositoryImpl: PostRepository {
     }
 
     override fun getAllAsync(callback: PostRepository.GetAllCallback) {
+        println(PostsApi.retrofitService.getAll()) // возвращает ссылку на функцию Call , от которой можем вызывать методы
+
         val request: Request = Request.Builder()
             //.url("${BASE_URL}/api/slow/posts")
             .url("${BASE_URL}/api/posts")
@@ -214,4 +292,4 @@ class PostRepositoryImpl: PostRepository {
             .close()
     }
 }
-
+*/

@@ -3,6 +3,19 @@ package ru.darek.nmedia.repository
 import ru.darek.nmedia.dto.Post
 
 interface PostRepository {
+    fun getAllAsync(callback: Callback<List<Post>>)
+    fun save(post: Post, callback: Callback<Post>)
+    fun removeById(id: Long, callback: Callback<Unit>)
+    fun likeById(id: Long, callback: Callback<Post>)
+    fun unlikeById(id: Long, callback: Callback<Post>)
+
+    interface Callback<T> {
+        fun onSuccess(posts: T) {}
+        fun onError(e: Exception) {}
+    }
+}
+/*
+interface PostRepository {
     fun getAll(): List<Post>
     fun likeById(id: Long)
     fun unlikeById(id: Long)
@@ -26,4 +39,4 @@ interface PostRepository {
         fun onSuccess() {}
         fun onError(e: Exception) {}
     }
-}
+} */

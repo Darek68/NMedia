@@ -27,8 +27,7 @@ class FeedFragment : Fragment() {
     private val viewModel: PostViewModel by viewModels(
         ownerProducer = ::requireParentFragment
     )
-  //  private val urls = listOf("netology.jpg", "sber.jpg", "tcs.jpg", "404.png")
-  //  private var index = 0
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -39,13 +38,7 @@ class FeedFragment : Fragment() {
             container,
             false
         )
-       /* val url = "http://10.0.2.2:9999/avatars/${urls[index++]}"
-            Glide.with(binding.image)
-                .load(url)
-                .placeholder(R.drawable.ic_loading_100dp)
-                .error(R.drawable.ic_error_100dp)
-                .timeout(10_000)
-                .into(binding.image) */
+
         val adapter = PostsAdapter(object : PostCallback {
             override fun onEdit(post: Post) {
                 viewModel.edit(post)

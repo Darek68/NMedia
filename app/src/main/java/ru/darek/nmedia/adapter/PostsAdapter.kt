@@ -41,8 +41,7 @@ class PostViewHolder(
     private val binding: CardPostBinding,
     private val postCallbeck: PostCallback
 ) : RecyclerView.ViewHolder(binding.root) {
-   // private val urls = listOf("netology.jpg", "sber.jpg", "tcs.jpg", "404.png")
-   // private var index = 0
+
     fun bind(post: Post) {
         binding.apply {
             author.text = post.author

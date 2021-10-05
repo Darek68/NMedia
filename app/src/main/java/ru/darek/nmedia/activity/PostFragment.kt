@@ -25,8 +25,7 @@ import ru.darek.nmedia.util.AndroidUtils.getStrCnt
 import ru.darek.nmedia.viewmodel.PostViewModel
 
 class PostFragment : Fragment() {
-   // private val urls = listOf("netology.jpg", "sber.jpg", "tcs.jpg", "404.png")
-    //private var index = 0
+
     private val viewModel: PostViewModel by viewModels(
         ownerProducer = ::requireParentFragment
     )

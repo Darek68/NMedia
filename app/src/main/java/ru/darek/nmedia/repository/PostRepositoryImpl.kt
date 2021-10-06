@@ -28,8 +28,9 @@ class PostRepositoryImpl : PostRepository {
                         callback.onError(RuntimeException(response.message()))
                         return
                     }
+                } else {
+                    callback.onSuccess(response.body() ?: throw RuntimeException("body is null"))
                 }
-                callback.onSuccess(response.body() ?: throw RuntimeException("body is null"))
             }
             override fun onFailure(call: Call<List<Post>>, t: Throwable) {
                 TODO("Not yet implemented")
@@ -39,12 +40,19 @@ class PostRepositoryImpl : PostRepository {
 
     override fun save(post: Post, callback: PostRepository.Callback<Post>) {
         PostsApi.retrofitService.save(post).enqueue(object : Callback<Post> {
+            var count = 2
             override fun onResponse(call: Call<Post>, response: Response<Post>) {
                 if (!response.isSuccessful) {
-                    callback.onError(RuntimeException(response.message()))
-                    return
+                    if (count > 0) {
+                        count--
+                        PostsApi.retrofitService.save(post).enqueue(this)
+                    } else {
+                        callback.onError(RuntimeException(response.message()))
+                        return
+                    }
+                } else {
+                    callback.onSuccess(response.body() ?: throw RuntimeException("body is null"))
                 }
-                callback.onSuccess(response.body() ?: throw RuntimeException("body is null"))
             }
             override fun onFailure(call: Call<Post>, t: Throwable) {
                 TODO("Not yet implemented")
@@ -54,12 +62,19 @@ class PostRepositoryImpl : PostRepository {
 
     override fun removeById(id: Long, callback: PostRepository.Callback<Unit>) {
         PostsApi.retrofitService.removeById(id).enqueue(object : Callback<Unit> {
+            var count = 2
             override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
                 if (!response.isSuccessful) {
-                    callback.onError(RuntimeException(response.message()))
-                    return
+                        if (count > 0) {
+                            count--
+                            PostsApi.retrofitService.removeById(id).enqueue(this)
+                        } else {
+                            callback.onError(RuntimeException(response.message()))
+                            return
+                        }
+                } else {
+                    callback.onSuccess(response.body() ?: throw RuntimeException("body is null"))
                 }
-                callback.onSuccess(response.body() ?: throw RuntimeException("body is null"))
             }
             override fun onFailure(call: Call<Unit>, t: Throwable) {
                 TODO("Not yet implemented")
@@ -69,12 +84,19 @@ class PostRepositoryImpl : PostRepository {
 
     override fun likeById(id: Long, callback: PostRepository.Callback<Post>) {
         PostsApi.retrofitService.likeById(id).enqueue(object : Callback<Post> {
+            var count = 2
             override fun onResponse(call: Call<Post>, response: Response<Post>) {
                 if (!response.isSuccessful) {
-                    callback.onError(RuntimeException(response.message()))
-                    return
+                    if (count > 0) {
+                        count--
+                        PostsApi.retrofitService.likeById(id).enqueue(this)
+                    } else {
+                        callback.onError(RuntimeException(response.message()))
+                        return
+                    }
+                } else {
+                    callback.onSuccess(response.body() ?: throw RuntimeException("body is null"))
                 }
-                callback.onSuccess(response.body() ?: throw RuntimeException("body is null"))
             }
             override fun onFailure(call: Call<Post>, t: Throwable) {
                 TODO("Not yet implemented")
@@ -84,12 +106,19 @@ class PostRepositoryImpl : PostRepository {
 
     override fun unlikeById(id: Long, callback: PostRepository.Callback<Post>) {
         PostsApi.retrofitService.dislikeById(id).enqueue(object : Callback<Post> {
+            var count = 2
             override fun onResponse(call: Call<Post>, response: Response<Post>) {
                 if (!response.isSuccessful) {
-                    callback.onError(RuntimeException(response.message()))
-                    return
+                    if (count > 0) {
+                        count--
+                        PostsApi.retrofitService.likeById(id).enqueue(this)
+                    } else {
+                        callback.onError(RuntimeException(response.message()))
+                        return
+                    }
+                } else {
+                    callback.onSuccess(response.body() ?: throw RuntimeException("body is null"))
                 }
-                callback.onSuccess(response.body() ?: throw RuntimeException("body is null"))
             }
             override fun onFailure(call: Call<Post>, t: Throwable) {
                 TODO("Not yet implemented")

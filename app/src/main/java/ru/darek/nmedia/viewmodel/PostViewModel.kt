@@ -102,13 +102,21 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             repository.save(it, object : PostRepository.Callback<Post> {
                 override fun onSuccess(newPost: Post) {
                     _data.postValue(
-                        _data.value?.copy(posts = _data.value?.posts.orEmpty()
-                            .map {
-                                if (it.id == newPost.id) {
-                                    newPost
-                                } else it
-                            }
-                        )
+                        (if (_data.value?.posts?.contains(newPost) == true) {
+                            _data.value?.copy(loading = false, posts = _data.value?.posts.orEmpty()
+                                .map {
+                                    if (it.id == newPost.id) {
+                                        newPost
+                                    } else it
+                                }
+                            )
+                        } else {
+                            val newPosts = _data.value?.posts?.toMutableList()
+                            newPosts?.add(newPost)
+                            if (newPosts != null) {
+                                _data.value?.copy(loading = false, posts = newPosts)
+                            } else _data.value
+                        }) as FeedModel?
                     )
                 }
                 override fun onError(e: Exception) {

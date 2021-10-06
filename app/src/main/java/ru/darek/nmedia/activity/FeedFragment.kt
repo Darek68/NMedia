@@ -106,7 +106,9 @@ class FeedFragment : Fragment() {
             binding.emptyText.isVisible = state.empty
             // binding.emptyText.isVisible = state.posts.isEmpty()
         })
-
+        binding.retryButton.setOnClickListener {
+            viewModel.loadPosts()
+        }
         binding.fab.setOnClickListener {
             val bundle = Bundle().apply {
                 putString("content", "Укажите текст поста..")

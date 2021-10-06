@@ -18,10 +18,16 @@ class PostRepositoryImpl : PostRepository {
 
     override fun getAllAsync(callback: PostRepository.Callback<List<Post>>) {
         PostsApi.retrofitService.getAll().enqueue(object : Callback<List<Post>> {
+            var count = 2
             override fun onResponse(call: Call<List<Post>>, response: Response<List<Post>>) {
                 if (!response.isSuccessful) {
-                    callback.onError(RuntimeException(response.message()))
-                    return
+                    if (count > 0) {
+                        count--
+                        PostsApi.retrofitService.getAll().enqueue(this)
+                    } else {
+                        callback.onError(RuntimeException(response.message()))
+                        return
+                    }
                 }
                 callback.onSuccess(response.body() ?: throw RuntimeException("body is null"))
             }

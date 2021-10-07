@@ -102,6 +102,30 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             repository.save(it, object : PostRepository.Callback<Post> {
                 override fun onSuccess(newPost: Post) {
                     _data.postValue(
+                        if (_data.value?.posts?.find { it.id == newPost.id } != null) {
+                            _data.value?.copy(loading = false, posts = _data.value?.posts.orEmpty()
+                                .map { if (it.id == newPost.id) newPost else it }
+                            )
+                        } else {
+                            _data.value?.copy(loading = false, posts = _data.value?.posts.orEmpty().toMutableList() + newPost)
+                        }
+                    )
+                }
+
+                override fun onError(e: Exception) {
+                    _data.postValue(FeedModel(error = true))
+                }
+            })
+            _postCreated.postValue(Unit)
+        }
+        edited.value = empty
+    }
+  /*  fun save() {
+        edited.value?.let {
+            //  val oldPost = _data.value?.posts?.last { it.id == id }
+            repository.save(it, object : PostRepository.Callback<Post> {
+                override fun onSuccess(newPost: Post) {
+                    _data.postValue(
                         (if (_data.value?.posts?.contains(newPost) == true) {
                             _data.value?.copy(loading = false, posts = _data.value?.posts.orEmpty()
                                 .map {
@@ -126,7 +150,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             _postCreated.postValue(Unit)
         }
         edited.value = empty
-    }
+    } */
     fun removeById(id: Long) {
         val old = _data.value?.posts.orEmpty()
         try {

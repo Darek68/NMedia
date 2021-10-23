@@ -15,6 +15,7 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 import ru.darek.nmedia.R
 import ru.darek.nmedia.adapter.PostCallback
 import ru.darek.nmedia.adapter.PostsAdapter
@@ -91,7 +92,7 @@ class FeedFragment : Fragment() {
                 val bundle = Bundle().apply {
                     putLong("id", post.id)
                 }
-                viewModel.edited.value = post
+               // viewModel.edited.value = post
                 findNavController().navigate(
                     R.id.action_feedFragment_to_postFragment,
                     bundle
@@ -101,11 +102,22 @@ class FeedFragment : Fragment() {
         binding.list.adapter = adapter
         viewModel.data.observe(viewLifecycleOwner, { state ->
             adapter.submitList(state.posts)
-            binding.progress.isVisible = state.loading
-            binding.errorGroup.isVisible = state.error
+
             binding.emptyText.isVisible = state.empty
-            // binding.emptyText.isVisible = state.posts.isEmpty()
+           // binding.emptyText.isVisible = state.posts.isEmpty()
         })
+        viewModel.data.observe(viewLifecycleOwner, { state ->
+            /*  binding.progress.isVisible = state.loading
+            if(state.error) {
+                Snackbar.make(binding.root, R.string.error_loading, Snackbar.LENGTH_LONG).show()
+            } */
+             adapter.submitList(state.posts)
+            binding.emptyText.isVisible = state.empty
+            binding.swiperefresh.isRefreshing
+        })
+        binding.swiperefresh.setOnRefreshListener {
+            viewModel.refreshPosts()
+        }
         binding.retryButton.setOnClickListener {
             viewModel.loadPosts()
         }

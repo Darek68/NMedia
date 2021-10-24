@@ -30,7 +30,6 @@ private val retrofit = Retrofit.Builder()
     .client(okhttp)
     .build()
 
-
 interface PostsApiService {
     @GET("posts")
     suspend fun getAll(): Response<List<Post>>
@@ -50,6 +49,13 @@ interface PostsApiService {
     @DELETE("posts/{id}/likes")
     suspend fun dislikeById(@Path("id") id: Long): Response<Post>
 }
+
+object PostsApi {
+    val retrofitService by lazy {
+        retrofit.create<PostsApiService>()
+    }
+}
+
 /*
 interface PostsApiService {
     @GET("posts")
@@ -70,9 +76,3 @@ interface PostsApiService {
     @DELETE("posts/{id}/likes")
     suspend fun dislikeById(@Path("id") id: Long): Post
 } */
-
-object PostsApi {
-    val retrofitService by lazy {
-        retrofit.create<PostsApiService>()
-    }
-}

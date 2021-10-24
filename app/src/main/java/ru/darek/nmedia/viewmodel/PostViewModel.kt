@@ -31,19 +31,6 @@ private val empty = Post(
 )
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {
-    // упрощённый вариант
-   /* private val repository: PostRepository =
-        PostRepositoryImpl(AppDb.getInstance(context = application).postDao())
-    private val _data = repository.data.map{ FeedModel(posts = it, empty = it.isEmpty())}
-    val data: LiveData<FeedModel>
-        get() = _data
-    private val _dataState = MutableLiveData<FeedModelState>()
-    val dataState: LiveData<FeedModelState>
-        get() = _dataState
-    private val edited = MutableLiveData(empty)
-    private val _postCreated = SingleLiveEvent<Unit>()
-    val postCreated: LiveData<Unit>
-        get() = _postCreated */
    // упрощённый вариант
    private val repository: PostRepository =
        PostRepositoryImpl(AppDb.getInstance(context = application).postDao())
@@ -81,9 +68,29 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             _dataState.value = FeedModelState(error = true)
         }
     }
+    fun likeById(id: Long) = viewModelScope.launch {
+        try {
 
+            _dataState.value = FeedModelState(refreshing = true)
+            repository.likeById(id)
+            _dataState.value = FeedModelState()
+        } catch (e: Exception) {
+            _dataState.value = FeedModelState(error = true)
+        }
+    }
+
+    fun removeById(id: Long) = viewModelScope.launch {
+        try {
+
+            _dataState.value = FeedModelState(refreshing = true)
+            repository.removeById(id)
+            _dataState.value = FeedModelState()
+        } catch (e: Exception) {
+            _dataState.value = FeedModelState(error = true)
+        }
+    }
     fun save() {
-       /* edited.value?.let {
+        edited.value?.let {
             _postCreated.value = Unit
             viewModelScope.launch {
                 try {
@@ -94,7 +101,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                 }
             }
         }
-        edited.value = empty */
+        edited.value = empty
     }
 
     fun edit(post: Post) {
@@ -109,16 +116,24 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         edited.value = edited.value?.copy(content = text)
     }
 
-    fun likeById(id: Long) {
-        TODO()
-    }
 
-    fun removeById(id: Long) {
-        TODO()
-    }
     fun shareById(id: Long) {}
 
 }
+// упрощённый вариант
+/* private val repository: PostRepository =
+     PostRepositoryImpl(AppDb.getInstance(context = application).postDao())
+ private val _data = repository.data.map{ FeedModel(posts = it, empty = it.isEmpty())}
+ val data: LiveData<FeedModel>
+     get() = _data
+ private val _dataState = MutableLiveData<FeedModelState>()
+ val dataState: LiveData<FeedModelState>
+     get() = _dataState
+ private val edited = MutableLiveData(empty)
+ private val _postCreated = SingleLiveEvent<Unit>()
+ val postCreated: LiveData<Unit>
+     get() = _postCreated */
+
     /*
     // упрощённый вариант
     private val repository: PostRepository = PostRepositoryImpl()

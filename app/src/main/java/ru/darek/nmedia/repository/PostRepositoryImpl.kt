@@ -5,7 +5,7 @@ package ru.darek.nmedia.repository
 
 import androidx.lifecycle.*
 import okio.IOException
-import retrofit2.Response.error
+//import retrofit2.Response.error
 import ru.darek.nmedia.api.*
 import ru.darek.nmedia.dao.PostDao
 import ru.darek.nmedia.dto.Post
@@ -15,11 +15,6 @@ import ru.darek.nmedia.entity.toDto
 import ru.darek.nmedia.entity.toEntity
 import ru.darek.nmedia.error.*
 
-/*
-import ru.darek.nmedia.error.ApiError
-import ru.darek.nmedia.error.NetworkError
-import ru.darek.nmedia.error.UnknownError
-*/
  class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
      override val data = dao.getAll().map(List<PostEntity>::toDto)
     override suspend fun getAll() {
@@ -40,27 +35,46 @@ import ru.darek.nmedia.error.UnknownError
     }
 
     override suspend fun save(post: Post) {
-        PostsApi.retrofitService.save(post)
-       /* try {
-            val response = PostsApi.service.save(post)
+        //PostsApi.retrofitService.save(post)
+        try {
+            val response = PostsApi.retrofitService.save(post)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
-
             val body = response.body() ?: throw ApiError(response.code(), response.message())
             dao.insert(PostEntity.fromDto(body))
         } catch (e: IOException) {
             throw NetworkError
         } catch (e: Exception) {
             throw UnknownError
-        } */
+        }
     }
+     override suspend fun likeById(id: Long){
+         try { // override val data = dao.getAll().map(List<PostEntity>::toDto)
+             /*
+             posts = posts.map {
+                 if (it.id != id) it else it.copy(
+                     likedByMe = !it.likedByMe,
+                     likes = if (it.likedByMe) it.likes - 1 else it.likes + 1
+                 )
+             }
+             dao.insert() */
+             val response = PostsApi.retrofitService.likeById(id)
+             if (!response.isSuccessful) {
+                 throw ApiError(response.code(), response.message())
+             }
+             val body = response.body() ?: throw ApiError(response.code(), response.message())
+             dao.insert(PostEntity.fromDto(body))
+         } catch (e: IOException) {
+             throw NetworkError
+         } catch (e: Exception) {
+             throw UnknownError
+         }
+     }
      override suspend fun removeById(id:Long){
          PostsApi.retrofitService.removeById(id)
      }
-     override suspend fun likeById(id: Long){
-         PostsApi.retrofitService.likeById(id)
-     }
+
 }
 /*
 class PostRepositoryImpl : PostRepository {

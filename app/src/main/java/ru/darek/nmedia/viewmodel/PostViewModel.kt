@@ -61,7 +61,8 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun refreshPosts() = viewModelScope.launch {
         try {
-            _dataState.value = FeedModelState(refreshing = true)
+            //_dataState.value = FeedModelState(refreshing = true)
+            _dataState.value = FeedModelState(loading = true)
             repository.getAll()
             _dataState.value = FeedModelState()
         } catch (e: Exception) {
@@ -69,20 +70,36 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
     fun likeById(id: Long) = viewModelScope.launch {
-        try {
-
-            _dataState.value = FeedModelState(refreshing = true)
-            repository.likeById(id)
-            _dataState.value = FeedModelState()
-        } catch (e: Exception) {
-            _dataState.value = FeedModelState(error = true)
+        val oldPost = data.value?.posts?.last { it.id == id }
+        if (oldPost != null) {
+            if (oldPost.likedByMe) {
+                try {
+                    //_dataState.value = FeedModelState(refreshing = true)
+                    _dataState.value = FeedModelState(loading = true)
+                    repository.dislikeById(id)
+                    _dataState.value = FeedModelState()
+                } catch (e: Exception) {
+                    _dataState.value = FeedModelState(error = true)
+                }
+            }
+            else {
+                try {
+                    //_dataState.value = FeedModelState(refreshing = true)
+                    _dataState.value = FeedModelState(loading = true)
+                    repository.likeById(id)
+                    _dataState.value = FeedModelState()
+                } catch (e: Exception) {
+                    _dataState.value = FeedModelState(error = true)
+                }
+            }
         }
     }
 
     fun removeById(id: Long) = viewModelScope.launch {
         try {
 
-            _dataState.value = FeedModelState(refreshing = true)
+            //_dataState.value = FeedModelState(refreshing = true)
+            _dataState.value = FeedModelState(loading = true)
             repository.removeById(id)
             _dataState.value = FeedModelState()
         } catch (e: Exception) {
@@ -94,6 +111,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             _postCreated.value = Unit
             viewModelScope.launch {
                 try {
+                    _dataState.value = FeedModelState(loading = true)
                     repository.save(it)
                     _dataState.value = FeedModelState()
                 } catch (e: Exception) {

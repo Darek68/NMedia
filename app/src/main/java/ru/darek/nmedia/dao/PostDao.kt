@@ -5,6 +5,10 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import retrofit2.Call
+import retrofit2.http.DELETE
+import retrofit2.http.POST
+import retrofit2.http.Path
 import ru.darek.nmedia.dto.Post
 import ru.darek.nmedia.entity.PostEntity
 import java.io.Closeable
@@ -33,6 +37,14 @@ interface PostDao {
 
     @Query("DELETE FROM PostEntity WHERE id = :id")
     suspend fun removeById(id: Long)
+
+    @Query("""
+        UPDATE PostEntity SET
+        likes = likes + CASE WHEN likedByMe THEN -1 ELSE 1 END,
+        likedByMe = CASE WHEN likedByMe THEN 0 ELSE 1 END
+        WHERE id = :id
+        """)
+    suspend fun likeById(id: Long)
 }
 /*
 @Dao

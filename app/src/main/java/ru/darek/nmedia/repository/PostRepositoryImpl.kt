@@ -19,7 +19,7 @@ import ru.darek.nmedia.error.*
      override val data = dao.getAll().map(List<PostEntity>::toDto)
     override suspend fun getAll() {
         try {
-            //val response = PostsApi.service.getAll()
+            dao.getAll() // что будет результатом вызова функции ...?  LiveData<List<PostEntity>> и что с этим делать?
             val response = PostsApi.retrofitService.getAll()
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
@@ -37,6 +37,7 @@ import ru.darek.nmedia.error.*
     override suspend fun save(post: Post) {
         //PostsApi.retrofitService.save(post)
         try {
+            dao.insert(PostEntity.fromDto(post))
             val response = PostsApi.retrofitService.save(post)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
@@ -50,15 +51,8 @@ import ru.darek.nmedia.error.*
         }
     }
      override suspend fun likeById(id: Long){
-         try { // override val data = dao.getAll().map(List<PostEntity>::toDto)
-             /*
-             posts = posts.map {
-                 if (it.id != id) it else it.copy(
-                     likedByMe = !it.likedByMe,
-                     likes = if (it.likedByMe) it.likes - 1 else it.likes + 1
-                 )
-             }
-             dao.insert() */
+         try {
+             dao.likeById(id)
              val response = PostsApi.retrofitService.likeById(id)
              if (!response.isSuccessful) {
                  throw ApiError(response.code(), response.message())
@@ -71,10 +65,37 @@ import ru.darek.nmedia.error.*
              throw UnknownError
          }
      }
-     override suspend fun removeById(id:Long){
-         PostsApi.retrofitService.removeById(id)
+     override suspend fun dislikeById(id: Long){
+         try {
+             dao.likeById(id)
+             val response = PostsApi.retrofitService.dislikeById(id)
+             if (!response.isSuccessful) {
+                 throw ApiError(response.code(), response.message())
+             }
+             val body = response.body() ?: throw ApiError(response.code(), response.message())
+             dao.insert(PostEntity.fromDto(body))
+         } catch (e: IOException) {
+             throw NetworkError
+         } catch (e: Exception) {
+             throw UnknownError
+         }
      }
-
+     override suspend fun removeById(id:Long){
+         try {
+             dao.removeById(id)
+             val response = PostsApi.retrofitService.removeById(id)
+             if (!response.isSuccessful) {
+                 throw ApiError(response.code(), response.message())
+             }
+             // сервак ничего не вернет.. :-(
+            /* val body = response.body() ?: throw ApiError(response.code(), response.message())
+             dao.insert(PostEntity.fromDto(body)) */
+         } catch (e: IOException) {
+             throw NetworkError
+         } catch (e: Exception) {
+             throw UnknownError
+         }
+     }
 }
 /*
 class PostRepositoryImpl : PostRepository {

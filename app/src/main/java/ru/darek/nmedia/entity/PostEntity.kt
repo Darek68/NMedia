@@ -21,9 +21,6 @@ data class PostEntity(
 ) {
     fun toDto() =  Post(id, author, authorAvatar ?: "", content, published, likedByMe, likes, share, views,video ?: "")
 
-  /*  fun toDto() =
-        video?.let { Post(id, author, authorAvatar, content, published, likedByMe, likes, share, views, it) } */
-
     companion object {
         fun fromDto(dto: Post) =
             PostEntity(dto.id, dto.author, dto.authorAvatar, dto.content, dto.published, dto.likedByMe, dto.likes, dto.share, dto.views, dto.video)

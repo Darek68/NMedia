@@ -55,24 +55,3 @@ object PostsApi {
         retrofit.create<PostsApiService>()
     }
 }
-
-/*
-interface PostsApiService {
-    @GET("posts")
-    suspend fun getAll(): List<Post>
-
-    @GET("posts/{id}")
-    suspend fun getById(@Path("id") id: Long): Post
-
-    @POST("posts")
-    suspend fun save(@Body post: Post): Post
-
-    @DELETE("posts/{id}")
-    suspend fun removeById(@Path("id") id: Long): Unit
-
-    @POST("posts/{id}/likes")
-    suspend fun likeById(@Path("id") id: Long): Post
-
-    @DELETE("posts/{id}/likes")
-    suspend fun dislikeById(@Path("id") id: Long): Post
-} */

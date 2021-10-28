@@ -2,20 +2,17 @@ package ru.darek.nmedia.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-//import androidx.lifecycle.AndroidViewModel
 import ru.darek.nmedia.db.AppDb
 import ru.darek.nmedia.dto.Post
 import ru.darek.nmedia.model.FeedModel
 import ru.darek.nmedia.repository.*
 import ru.darek.nmedia.util.SingleLiveEvent
-import java.io.IOException
-import ru.darek.nmedia.R
 import ru.darek.nmedia.model.FeedModelState
-import kotlin.concurrent.thread
-import java.io.Closeable
 
 private val empty = Post(
     id = 0,
@@ -35,15 +32,24 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
    private val repository: PostRepository =
        PostRepositoryImpl(AppDb.getInstance(context = application).postDao())
 
-    val data: LiveData<FeedModel>  = repository.data.map(::FeedModel)
+    val data: LiveData<FeedModel>  = repository.data
+        .map(::FeedModel)
+        .asLiveData(Dispatchers.Default)
     private val _dataState = MutableLiveData<FeedModelState>()
     val dataState: LiveData<FeedModelState>
         get() = _dataState
 
+    val newerCount: LiveData<Int> = data.switchMap {
+        repository.getNewerCount(it.posts.firstOrNull()?.id ?: 0L)
+            .catch { e -> e.printStackTrace() }
+            //.catch { e -> _dataState.postValue(FeedModelState(error = true)) }
+            .asLiveData(Dispatchers.Default)
+    }
     private val edited = MutableLiveData(empty)
     private val _postCreated = SingleLiveEvent<Unit>()
     val postCreated: LiveData<Unit>
         get() = _postCreated
+    var newerCntSum: Int = 0
 
     init {
         loadPosts()

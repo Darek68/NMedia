@@ -1,6 +1,9 @@
 package ru.darek.nmedia.repository
 
 import androidx.lifecycle.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
 import okio.IOException
 import ru.darek.nmedia.api.*
 import ru.darek.nmedia.dao.PostDao
@@ -12,7 +15,9 @@ import ru.darek.nmedia.entity.toEntity
 import ru.darek.nmedia.error.*
 
  class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
-     override val data = dao.getAll().map(List<PostEntity>::toDto)
+     override val data = dao.getAll()
+         .map(List<PostEntity>::toDto)
+         .flowOn(Dispatchers.Default)
     override suspend fun getAll() {
         try {
             dao.getAll() // что будет результатом вызова функции ...?  LiveData<List<PostEntity>> и что с этим делать?
@@ -75,6 +80,24 @@ import ru.darek.nmedia.error.*
              throw UnknownError
          }
      }
+
+     override fun getNewerCount(id: Long): Flow<Int> = flow {
+         while (true) {
+             delay(10_000L)
+             println("Запрос сервера:  ${id}")
+             val response = PostsApi.retrofitService.getNewer(id)
+             if (!response.isSuccessful) {
+                 throw ApiError(response.code(), response.message())
+             }
+
+             val body = response.body() ?: throw ApiError(response.code(), response.message())
+             dao.insert(body.toEntity())
+             emit(body.size)
+         }
+     }
+         .catch { e -> throw AppError.from(e) }
+         .flowOn(Dispatchers.Default)
+
      override suspend fun removeById(id:Long){
          try {
              dao.removeById(id)

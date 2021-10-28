@@ -96,6 +96,8 @@ class FeedFragment : Fragment() {
             }
         })
         binding.list.adapter = adapter
+        //binding.newerButton.isVisible = false
+        binding.newerButton.visibility = View.GONE
 
         viewModel.data.observe(viewLifecycleOwner, { state ->
             adapter.submitList(state.posts)
@@ -113,6 +115,28 @@ class FeedFragment : Fragment() {
             binding.errorGroup.isVisible = state.error
             binding.swiperefresh.isRefreshing
         })
+        viewModel.newerCount.observe(viewLifecycleOwner) { state ->
+            if (state > 0) {
+                viewModel.newerCntSum += state
+                binding.newerButton.setText(getString(R.string.newer_Button) + viewModel.newerCntSum.toString())
+               // binding.newerButton.isVisible = true
+                binding.newerButton.visibility = View.VISIBLE
+            }
+              //  println("Ответ сервера:  ${state}")
+        }
+        binding.newerButton.setOnClickListener {
+            viewModel.newerCntSum = 0
+            binding.list.smoothScrollToPosition(0)
+           // binding.newerButton.isVisible = false
+            binding.newerButton.visibility = View.GONE
+            /* binding.list.submitList {
+                 binding.list.smoothScrolltoPosition(0)
+             }
+             adapter.submitList(state.posts)
+             list.submitList {
+                 list.smoothScrolltoPosition(0)
+             } */
+        }
         binding.swiperefresh.setOnRefreshListener {
             viewModel.refreshPosts()
         }

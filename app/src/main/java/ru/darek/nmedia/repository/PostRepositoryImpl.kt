@@ -12,6 +12,7 @@ import ru.darek.nmedia.entity.PostEntity
 
 import ru.darek.nmedia.entity.toDto
 import ru.darek.nmedia.entity.toEntity
+//import ru.darek.nmedia.entity.toEntity2
 import ru.darek.nmedia.error.*
 
  class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
@@ -89,8 +90,8 @@ import ru.darek.nmedia.error.*
              if (!response.isSuccessful) {
                  throw ApiError(response.code(), response.message())
              }
-
              val body = response.body() ?: throw ApiError(response.code(), response.message())
+            // val posts = body.map {it.copy(newer = true)}
              dao.insert(body.toEntity())
              emit(body.size)
          }

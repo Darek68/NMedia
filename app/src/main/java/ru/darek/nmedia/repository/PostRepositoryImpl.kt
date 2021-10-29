@@ -22,13 +22,13 @@ import ru.darek.nmedia.error.*
     override suspend fun getAll() {
         try {
             dao.getAll() // что будет результатом вызова функции ...?  LiveData<List<PostEntity>> и что с этим делать?
-          /*  val response = PostsApi.retrofitService.getAll()
+            val response = PostsApi.retrofitService.getAll()
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
 
             val body = response.body() ?: throw ApiError(response.code(), response.message())
-            dao.insert(body.toEntity())*/
+            dao.insert(body.toEntity())
         } catch (e: IOException) {
             throw NetworkError
         } catch (e: Exception) {

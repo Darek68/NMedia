@@ -10,7 +10,7 @@ import ru.darek.nmedia.entity.PostEntity
 
 @Dao
 interface PostDao {
-    @Query("SELECT * FROM PostEntity ORDER BY id DESC")
+    @Query("SELECT * FROM PostEntity WHERE newer = 0 ORDER BY id DESC")
     fun getAll(): Flow<List<PostEntity>>
 
     @Query("SELECT COUNT(*) == 0 FROM PostEntity")
@@ -32,6 +32,9 @@ interface PostDao {
         WHERE id = :id
         """)
     suspend fun likeById(id: Long)
+
+    @Query("UPDATE PostEntity SET newer = 0 WHERE newer = 1")
+    suspend fun cancelNew()
 }
 
 

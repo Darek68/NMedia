@@ -22,19 +22,28 @@ import ru.darek.nmedia.error.*
     override suspend fun getAll() {
         try {
             dao.getAll() // что будет результатом вызова функции ...?  LiveData<List<PostEntity>> и что с этим делать?
-            val response = PostsApi.retrofitService.getAll()
+          /*  val response = PostsApi.retrofitService.getAll()
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
 
             val body = response.body() ?: throw ApiError(response.code(), response.message())
-            dao.insert(body.toEntity())
+            dao.insert(body.toEntity())*/
         } catch (e: IOException) {
             throw NetworkError
         } catch (e: Exception) {
             throw UnknownError
         }
     }
+     override suspend fun getNewerPosts() {
+         try {
+             dao.cancelNew()
+         } catch (e: IOException) {
+             throw NetworkError
+         } catch (e: Exception) {
+             throw UnknownError
+         }
+     }
 
     override suspend fun save(post: Post) {
         try {
@@ -60,6 +69,7 @@ import ru.darek.nmedia.error.*
              }
              val body = response.body() ?: throw ApiError(response.code(), response.message())
              dao.insert(PostEntity.fromDto(body))
+
          } catch (e: IOException) {
              throw NetworkError
          } catch (e: Exception) {
@@ -91,8 +101,9 @@ import ru.darek.nmedia.error.*
                  throw ApiError(response.code(), response.message())
              }
              val body = response.body() ?: throw ApiError(response.code(), response.message())
-            // val posts = body.map {it.copy(newer = true)}
              dao.insert(body.toEntity())
+            /* val posts = body.map {it.copy(newer = true)}
+             dao.insert(posts.toEntity()) */
              emit(body.size)
          }
      }

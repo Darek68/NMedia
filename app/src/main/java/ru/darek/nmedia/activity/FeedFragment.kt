@@ -125,6 +125,7 @@ class FeedFragment : Fragment() {
               //  println("Ответ сервера:  ${state}")
         }
         binding.newerButton.setOnClickListener {
+            viewModel.loadNewPosts()
             viewModel.newerCntSum = 0
             binding.list.smoothScrollToPosition(0)
            // binding.newerButton.isVisible = false

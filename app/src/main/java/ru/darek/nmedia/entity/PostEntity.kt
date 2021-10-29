@@ -23,8 +23,8 @@ data class PostEntity(
     fun toDto() =  Post(id, author, authorAvatar ?: "", content, published, likedByMe, likes, share, views,video ?: "",newer)
 
     companion object {
-        fun fromDto(dto: Post) =
-            PostEntity(dto.id, dto.author, dto.authorAvatar, dto.content, dto.published, dto.likedByMe, dto.likes, dto.share, dto.views, dto.video)
+        fun fromDto(dto: Post, newer: Boolean = false) =
+            PostEntity(dto.id, dto.author, dto.authorAvatar, dto.content, dto.published, dto.likedByMe, dto.likes, dto.share, dto.views, dto.video,newer)
        /* fun fromDto2(dto: Post) =
             PostEntity(dto.id, dto.author, dto.authorAvatar, dto.content, dto.published, dto.likedByMe, dto.likes, dto.share, dto.views, dto.video, dto.newer) */
 
@@ -32,5 +32,5 @@ data class PostEntity(
 }
 
 fun List<PostEntity>.toDto(): List<Post> = map(PostEntity::toDto)
-fun List<Post>.toEntity(): List<PostEntity> = map(PostEntity::fromDto)
+fun List<Post>.toEntity(newer: Boolean = false): List<PostEntity> = map { PostEntity.fromDto(it, newer) }
 //fun List<Post>.toEntity2(): List<PostEntity> = map(PostEntity::fromDto2)

@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -14,7 +13,6 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_new_post.*
 import ru.darek.nmedia.databinding.FragmentNewPostBinding
 import ru.darek.nmedia.util.AndroidUtils
-//import ru.darek.nmedia.util.StringArg
 import ru.darek.nmedia.viewmodel.PostViewModel
 import java.util.prefs.Preferences
 

@@ -12,7 +12,6 @@ import ru.darek.nmedia.entity.PostEntity
 
 import ru.darek.nmedia.entity.toDto
 import ru.darek.nmedia.entity.toEntity
-//import ru.darek.nmedia.entity.toEntity2
 import ru.darek.nmedia.error.*
 
  class PostRepositoryImpl(private val dao: PostDao) : PostRepository {

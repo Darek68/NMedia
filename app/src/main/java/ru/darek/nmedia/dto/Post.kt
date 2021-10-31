@@ -2,6 +2,7 @@ package ru.darek.nmedia.dto
 
 data class Post(
     val id: Long,
+    val authorId: Long,
     val author: String,
     val authorAvatar: String ?,
     val content: String,
@@ -12,4 +13,5 @@ data class Post(
     val views:Int,
     val video:String ?,
     val newer:Boolean = false,
+    val ownedByMe: Boolean = false,
 )

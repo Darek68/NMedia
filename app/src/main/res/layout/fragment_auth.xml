@@ -23,7 +23,6 @@
         <EditText
             android:id="@+id/text_user_name"
             android:hint="@string/auth_name"
-            android:text="@string/auth_name"
             android:textColor="#6bfff7"
             android:textColorHint="#52afaa"
             android:textAlignment="center"

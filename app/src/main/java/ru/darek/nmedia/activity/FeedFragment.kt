@@ -7,16 +7,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import ru.darek.nmedia.R
 import ru.darek.nmedia.adapter.PostCallback
 import ru.darek.nmedia.adapter.PostsAdapter
+import ru.darek.nmedia.auth.AppAuth
+import ru.darek.nmedia.auth.AuthState
 import ru.darek.nmedia.databinding.FragmentFeedBinding
 import ru.darek.nmedia.dto.Post
+import ru.darek.nmedia.util.AndroidUtils
+import ru.darek.nmedia.viewmodel.AuthViewModel
 import ru.darek.nmedia.viewmodel.PostViewModel
 
 class FeedFragment : Fragment() {
@@ -24,6 +30,7 @@ class FeedFragment : Fragment() {
     private val viewModel: PostViewModel by viewModels(
         ownerProducer = ::requireParentFragment
     )
+    private val viewModelAuth: AuthViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,12 +56,19 @@ class FeedFragment : Fragment() {
                 )
             }
 
-            override fun onLike(post: Post) {
-                viewModel.likeById(post.id)
-            }
-
             override fun onRemove(post: Post) {
                 viewModel.removeById(post.id)
+            }
+
+            override fun onLike(post: Post) {
+                if (!viewModelAuth.authenticated) {
+                    findNavController().navigate(
+                        R.id.action_feedFragment_to_authFragment
+                    )
+                  //  AndroidUtils.hideKeyboard(requireView())
+                  //  findNavController().popBackStack()
+                }
+                if (viewModelAuth.authenticated) { viewModel.likeById(post.id)}
             }
 
             override fun onShare(post: Post) {
@@ -145,13 +159,28 @@ class FeedFragment : Fragment() {
             viewModel.loadPosts()
         }
         binding.fab.setOnClickListener {
-            val bundle = Bundle().apply {
-                putString("content", "Укажите текст поста..")
+            if (!viewModelAuth.authenticated) {
+                findNavController().navigate(
+                    R.id.action_feedFragment_to_authFragment
+                )
+              //  AndroidUtils.hideKeyboard(requireView())
+              //  findNavController().popBackStack()
             }
-            findNavController().navigate(
-                R.id.action_feedFragment_to_newPostFragment,
-                bundle
-            )
+            if (viewModelAuth.authenticated) {
+                val bundle = Bundle().apply {
+                    putString("content", "Укажите текст поста..")
+                }
+                findNavController().navigate(
+                    R.id.action_feedFragment_to_newPostFragment,
+                    bundle
+                )
+            } else {
+                Toast.makeText(
+                    context,
+                    "Вы должны залогинится!",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
         return binding.root
     }

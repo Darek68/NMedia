@@ -42,11 +42,9 @@ class AuthFragment: Fragment() {
             binding.textPassword.setText("")
             binding.textUserName.setText("")
         }
-      /*  POST http://localhost:9999/api/users/authentication
-        Content-Type: application/x-www-form-urlencoded
 
-        login=student&pass=secret */
         binding.buttonSubmit.setOnClickListener {
+            println("Вызов viewModel.getToken ${binding.textUserName.toString()}  ${binding.textPassword.toString()}")
            viewModel.getToken(binding.textUserName.toString(),binding.textPassword.toString())
         }
 

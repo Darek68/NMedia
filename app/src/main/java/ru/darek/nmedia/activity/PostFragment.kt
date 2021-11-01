@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import kotlinx.android.synthetic.main.fragment_post.*
 import ru.darek.nmedia.R
 import ru.darek.nmedia.adapter.PostCallback
 import ru.darek.nmedia.adapter.PostsAdapter
@@ -57,6 +58,7 @@ class PostFragment : Fragment() {
                 if (post.id == id) {
                     thisPost = post
                     binding.post.apply {
+                        binding.post.menu.visibility = if (post.ownedByMe) View.VISIBLE else View.INVISIBLE
                         author.text = post.author
                         published.text = post.published
                         content.text = post.content
@@ -85,6 +87,7 @@ class PostFragment : Fragment() {
         binding.post.menu.setOnClickListener {
             PopupMenu(it.context, it).apply {
                 inflate(R.menu.post_options)
+                thisPost?.let { post -> menu.setGroupVisible(R.id.owned, post.ownedByMe) } // надо проверить..
                 setOnMenuItemClickListener { menuItem ->
                     when (menuItem.itemId) {
                         R.id.post_remove -> {

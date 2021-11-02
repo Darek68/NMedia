@@ -163,6 +163,7 @@ class FeedFragment : Fragment() {
                 findNavController().navigate(
                     R.id.action_feedFragment_to_authFragment
                 )
+            // Вот эти строки портят работу :-(
               //  AndroidUtils.hideKeyboard(requireView())
               //  findNavController().popBackStack()
             }

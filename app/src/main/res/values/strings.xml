@@ -38,4 +38,6 @@
     <string name="auth_pass">Password</string>
     <string name="auth_bclear">Reset</string>
     <string name="auth_bsignin">Sign In</string>
+    <string name="error_log_in">Error login or password</string>
+    <string name="error_signin">Authorisation Error. Try again later</string>
 </resources>

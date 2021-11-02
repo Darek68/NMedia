@@ -39,4 +39,6 @@
     <string name="auth_bclear">Стереть</string>
     <string name="auth_bsignin">Войти</string>
     <string name="auth_pass">Пароль</string>
+    <string name="error_log_in">Неверный логин или пароль</string>
+    <string name="error_signin">Ошибка авторизации. Попытайтесь позже</string>
 </resources>

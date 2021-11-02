@@ -7,9 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewModelScope
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.launch
 import okhttp3.*
+import ru.darek.nmedia.R
 import ru.darek.nmedia.api.PostsApi
+import ru.darek.nmedia.auth.AppAuth
 import ru.darek.nmedia.databinding.FragmentAuthBinding
 import ru.darek.nmedia.databinding.FragmentNewPostBinding
 import ru.darek.nmedia.entity.PostEntity
@@ -23,7 +29,7 @@ import ru.darek.nmedia.viewmodel.PostViewModel
 
 class AuthFragment: Fragment() {
 
-    private val viewModel: FrmViewModel by viewModels(
+    private val viewModelFrm: FrmViewModel by viewModels(
         ownerProducer = ::requireParentFragment
     )
 
@@ -44,10 +50,33 @@ class AuthFragment: Fragment() {
         }
 
         binding.buttonSubmit.setOnClickListener {
-            println("Вызов viewModel.getToken ${binding.textUserName.toString()}  ${binding.textPassword.toString()}")
-           viewModel.getToken(binding.textUserName.toString(),binding.textPassword.toString())
+           val result = viewModelFrm.getToken(binding.textUserName.text.toString(),binding.textPassword.text.toString())
         }
 
+        viewModelFrm.data.observe(viewLifecycleOwner) {
+            when (viewModelFrm.data.value) {
+                404 -> {
+                    Snackbar.make(binding.root, R.string.error_log_in, Snackbar.LENGTH_LONG)
+                        .setAction("Retry"){}
+                        .show()
+                }
+                0 -> {
+                    println("Залогинились!!")
+                    AndroidUtils.hideKeyboard(requireView())
+                    findNavController().popBackStack()
+                    findNavController().navigateUp()
+                }
+                else -> {
+                    Snackbar.make(binding.root, R.string.error_signin, Snackbar.LENGTH_LONG)
+                        .setAction("Retry"){}
+                        .show()
+                    println("Ошибка авторизации!!")
+                    AndroidUtils.hideKeyboard(requireView())
+                    findNavController().popBackStack()
+                    findNavController().navigateUp()
+                }
+            }
+        }
         return binding.root
     }
 }

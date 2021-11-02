@@ -21,20 +21,16 @@ class FrmViewModel: ViewModel() {
     val data = SingleLiveEvent<Int>()
     fun getToken(name:String,pass:String) {
         viewModelScope.launch {
-            println("Работает getToken $name  $pass")
             try {
                 val response = PostsApi.retrofitService.updateUser(name, pass)
                 if (!response.isSuccessful) {
-                    println("2 ${response.code().toString()}  ${response.message()}")
                     data.postValue(response.code())
                     return@launch
                     //  throw ApiError(response.code(), response.message())
                 }
-                println("3 response")
                 val body = response.body() ?: throw ApiError(response.code(), response.message())
                 AppAuth.getInstance().setAuth(body.id, body.token)
                 data.postValue(0)
-                println("5 ${body.id}  ${body.token}")
             } catch (e: IOException) {
                 throw NetworkError
             } catch (e: Exception) {
@@ -42,28 +38,6 @@ class FrmViewModel: ViewModel() {
             }
         }
     }
-  /* fun getToken(name:String,pass:String) = viewModelScope.launch {
-       println("Работает getToken $name  $pass")
-       try {
-           val response = PostsApi.retrofitService.updateUser(name,pass)
-           if (!response.isSuccessful) {
-               println("2 ${response.code().toString()}  ${response.message()}")
-               if (response.code() == 404) {
-
-               }
-               throw ApiError(response.code(), response.message())
-           }
-           println("3 response")
-           val body = response.body() ?: throw ApiError(response.code(), response.message())
-           println("4     ${body.toString()} ")
-           AppAuth.getInstance().setAuth(body.id, body.token)
-           println("5 ${body.id}  ${body.token}")
-       } catch (e: IOException) {
-           throw NetworkError
-       } catch (e: Exception) {
-           throw UnknownError
-       }
-   } */
 }
 
 class Auth(val id:Long,val token:String)

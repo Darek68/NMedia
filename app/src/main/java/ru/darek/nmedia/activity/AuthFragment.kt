@@ -51,6 +51,8 @@ class AuthFragment: Fragment() {
 
         binding.buttonSubmit.setOnClickListener {
            val result = viewModelFrm.getToken(binding.textUserName.text.toString(),binding.textPassword.text.toString())
+           // AndroidUtils.hideKeyboard(requireView())
+           // findNavController().popBackStack()
         }
 
         viewModelFrm.data.observe(viewLifecycleOwner) {
@@ -59,21 +61,22 @@ class AuthFragment: Fragment() {
                     Snackbar.make(binding.root, R.string.error_log_in, Snackbar.LENGTH_LONG)
                         .setAction("Retry"){}
                         .show()
+                    println("viewModelFrm.data.observe => Ошибка неверный логин-пароль!!")
                 }
                 0 -> {
-                    println("Залогинились!!")
+                    println("viewModelFrm.data.observe => Залогинились!!")
                     AndroidUtils.hideKeyboard(requireView())
                     findNavController().popBackStack()
-                    findNavController().navigateUp()
+                   // findNavController().navigateUp()
                 }
                 else -> {
                     Snackbar.make(binding.root, R.string.error_signin, Snackbar.LENGTH_LONG)
                         .setAction("Retry"){}
                         .show()
-                    println("Ошибка авторизации!!")
+                    println("viewModelFrm.data.observe => Ошибка авторизации!!")
                     AndroidUtils.hideKeyboard(requireView())
                     findNavController().popBackStack()
-                    findNavController().navigateUp()
+                  //  findNavController().navigateUp()
                 }
             }
         }

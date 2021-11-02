@@ -51,6 +51,7 @@ class PostViewHolder(
             share.text = getStrCnt(post.share)
             views.text = getStrCnt(post.views)
             group.visibility =  if (post.video.isNullOrBlank()) View.GONE else View.VISIBLE
+            binding.menu.visibility = if (post.ownedByMe) View.VISIBLE else View.INVISIBLE
            /* like.setImageResource(
                 if (post.likedByMe) R.drawable.ic_liked_24 else R.drawable.ic_like_24
             ) */
@@ -69,6 +70,7 @@ class PostViewHolder(
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
                     inflate(R.menu.post_options)
+                    menu.setGroupVisible(R.id.owned, post.ownedByMe)
                     setOnMenuItemClickListener { menuItem ->
                         when (menuItem.itemId) {
                             R.id.post_remove -> {

@@ -157,7 +157,7 @@ class FeedFragment : Fragment() {
             viewModel.loadPosts()
         }
         binding.fab.setOnClickListener {
-            if (!viewModelAuth.authenticated) {
+          /*  if (!viewModelAuth.authenticated) {
                 findNavController().navigate(
                     R.id.action_feedFragment_to_authFragment
                 )
@@ -179,7 +179,14 @@ class FeedFragment : Fragment() {
                     "Вы должны залогинится!",
                     Toast.LENGTH_SHORT
                 ).show()
+            } */
+            val bundle = Bundle().apply {
+                putString("content", "Укажите текст поста..")
             }
+            findNavController().navigate(
+                R.id.action_feedFragment_to_newPostFragment,
+                bundle
+            )
         }
         return binding.root
     }

@@ -1,5 +1,6 @@
 package ru.darek.nmedia.api
 
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -10,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import ru.darek.nmedia.BuildConfig
 import ru.darek.nmedia.auth.AppAuth
-import ru.darek.nmedia.dto.Post
+import ru.darek.nmedia.dto.*
 import ru.darek.nmedia.viewmodel.Auth
 
 private const val BASE_URL = "${BuildConfig.BASE_URL}/api/"
@@ -62,6 +63,17 @@ interface PostsApiService {
 
     @DELETE("posts/{id}/likes")
     suspend fun dislikeById(@Path("id") id: Long): Response<Post>
+
+    @Multipart
+    @POST("media")
+    suspend fun upload(@Part media: MultipartBody.Part): Response<Media>
+
+    @Multipart
+    @POST("media")
+    suspend fun uploadWithAttachment(
+        @Part media: MultipartBody.Part,
+        @Part content: MultipartBody.Part
+    ): Response<Media>
 
     @FormUrlEncoded
     @POST("users/authentication")

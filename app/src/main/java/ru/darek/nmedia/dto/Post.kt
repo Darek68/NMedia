@@ -1,5 +1,7 @@
 package ru.darek.nmedia.dto
 
+import ru.darek.nmedia.enumeration.AttachmentType
+
 data class Post(
     val id: Long,
     val authorId: Long,
@@ -13,5 +15,11 @@ data class Post(
     val views:Int,
     val video:String ?,
     val newer:Boolean = false,
+    val attachment: Attachment? = null,
     val ownedByMe: Boolean = false,
+)
+
+data class Attachment(
+    val url: String,
+    val type: AttachmentType,
 )

@@ -4,14 +4,18 @@ import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import okio.IOException
 import ru.darek.nmedia.api.*
 import ru.darek.nmedia.dao.PostDao
+import ru.darek.nmedia.dto.*
 import ru.darek.nmedia.dto.Post
 import ru.darek.nmedia.entity.PostEntity
 
 import ru.darek.nmedia.entity.toDto
 import ru.darek.nmedia.entity.toEntity
+import ru.darek.nmedia.enumeration.AttachmentType
 import ru.darek.nmedia.error.*
 
  class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
@@ -59,6 +63,61 @@ import ru.darek.nmedia.error.*
             throw UnknownError
         }
     }
+     override suspend fun saveWithAttachment(post: Post, uploadFile: MediaUpload) {
+         try {
+             val media = upload(uploadFile)
+             // TODO: add support for other types
+             val postWithAttachment = post.copy(attachment = Attachment(media.id, AttachmentType.IMAGE))
+             save(postWithAttachment)
+         } catch (e: AppError) {
+             throw e
+         } catch (e: java.io.IOException) {
+             throw NetworkError
+         } catch (e: Exception) {
+             throw UnknownError
+         }
+     }
+
+     override suspend fun upload(upload: MediaUpload): Media {
+         try {
+             val media = MultipartBody.Part.createFormData(
+                 "file", upload.file.name, upload.file.asRequestBody()
+             )
+
+             val response = PostsApi.retrofitService.upload(media)
+             if (!response.isSuccessful) {
+                 throw ApiError(response.code(), response.message())
+             }
+
+             return response.body() ?: throw ApiError(response.code(), response.message())
+         } catch (e: java.io.IOException) {
+             throw NetworkError
+         } catch (e: Exception) {
+             throw UnknownError
+         }
+     }
+     suspend fun uploadWithAttachment(upload: MediaUpload): Media {
+         try {
+             val media = MultipartBody.Part.createFormData(
+                 "file", upload.file.name, upload.file.asRequestBody()
+             )
+             val content = MultipartBody.Part.createFormData(
+                 "content", "eny text"
+             )
+
+             val response = PostsApi.retrofitService.uploadWithAttachment(media, content)
+             if (!response.isSuccessful) {
+                 throw ApiError(response.code(), response.message())
+             }
+
+             return response.body() ?: throw ApiError(response.code(), response.message())
+         } catch (e: java.io.IOException) {
+             throw NetworkError
+         } catch (e: Exception) {
+             throw UnknownError
+         }
+     }
+
      override suspend fun likeById(id: Long){
          try {
              dao.likeById(id)

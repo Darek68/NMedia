@@ -41,4 +41,5 @@
     <string name="auth_pass">Пароль</string>
     <string name="error_log_in">Неверный логин или пароль</string>
     <string name="error_signin">Ошибка авторизации. Попытайтесь позже</string>
+    <string name="post_illustration">картинка для поста</string>
 </resources>

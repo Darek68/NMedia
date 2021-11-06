@@ -13,6 +13,7 @@ import ru.darek.nmedia.R
 import ru.darek.nmedia.databinding.CardPostBinding
 import ru.darek.nmedia.dto.Post
 import ru.darek.nmedia.util.AndroidUtils.getStrCnt
+import ru.darek.nmedia.BuildConfig
 
 interface PostCallback{
     fun onLike(post: Post)
@@ -58,7 +59,8 @@ class PostViewHolder(
            // like.setIconResource(if (post.likedByMe) R.drawable.ic_liked_24 else R.drawable.ic_like_24)
             like.setIconTintResource(if (post.likedByMe) R.color.red else R.color.grey)
             like.isChecked = post.likedByMe
-            val url = "http://10.0.2.2:9999/avatars/${post.authorAvatar}"
+           // val url = "http://10.0.2.2:9999/avatars/${post.authorAvatar}"
+            val url = "${BuildConfig.BASE_URL}/avatars/${post.authorAvatar}"
             Glide.with(avatar)
                 .load(url)
                 .placeholder(R.drawable.ic_loading_100dp)
@@ -66,6 +68,22 @@ class PostViewHolder(
                 .circleCrop()
                 .timeout(10_000)
                 .into(avatar)
+            // d7dff806-4456-4e35-a6a1-9f2278c5d639.png  привести к http://10.0.2.2:9999/media/d7dff806-4456-4e35-a6a1-9f2278c5d639.png
+            //private const val BASE_URL = "${BuildConfig.BASE_URL}/api/"
+            //private const val BASE_URL = "http://10.0.2.2:9999/api/"
+            figure.visibility = View.GONE
+            post.attachment?.let {
+                content.text = post.content + " >>> " + it.url
+                val urlPicture = "${BuildConfig.BASE_URL}/media/${it.url}"
+                Glide.with(figure)
+                    .load(url)
+                    .placeholder(R.drawable.ic_loading_100dp)
+                    .error(R.drawable.ic_error_100dp)
+                    .timeout(10_000)
+                    .into(figure)
+                figure.visibility = View.VISIBLE
+            }
+
 
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {

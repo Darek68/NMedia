@@ -40,4 +40,5 @@
     <string name="auth_bsignin">Sign In</string>
     <string name="error_log_in">Error login or password</string>
     <string name="error_signin">Authorisation Error. Try again later</string>
+    <string name="post_illustration">illustration for post</string>
 </resources>

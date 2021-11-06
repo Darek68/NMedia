@@ -1,5 +1,6 @@
 package ru.darek.nmedia.adapter
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +23,8 @@ interface PostCallback{
     fun onRemove(post: Post) {}
     fun onVideo(post: Post)
     fun onContent(post: Post)
+   // fun onPicture(post: Post)
+   fun onPicture(pic: String)
 }
 
 class PostsAdapter(private val postCallbeck: PostCallback) :
@@ -73,10 +76,9 @@ class PostViewHolder(
             //private const val BASE_URL = "http://10.0.2.2:9999/api/"
             figure.visibility = View.GONE
             post.attachment?.let {
-                content.text = post.content + " >>> " + it.url
                 val urlPicture = "${BuildConfig.BASE_URL}/media/${it.url}"
                 Glide.with(figure)
-                    .load(url)
+                    .load(urlPicture)
                     .placeholder(R.drawable.ic_loading_100dp)
                     .error(R.drawable.ic_error_100dp)
                     .timeout(10_000)
@@ -119,6 +121,12 @@ class PostViewHolder(
             }
             content.setOnClickListener {
                 postCallbeck.onContent(post)
+            }
+           /* figure.setOnClickListener {
+                postCallbeck.onPicture(post)
+            } */
+            figure.setOnClickListener {
+                post.attachment?.let { att -> postCallbeck.onPicture(att.url) }
             }
         }
     }

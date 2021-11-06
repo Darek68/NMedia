@@ -97,7 +97,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/posts_avatar_size"
         android:background="@drawable/ic_banner_fon"
-        app:layout_constraintTop_toBottomOf="@id/content"
+        app:layout_constraintTop_toBottomOf="@id/figure"
         app:layout_constraintBottom_toTopOf="@id/footer"
         tools:context=".activity.MainActivity">
         <androidx.constraintlayout.widget.Group

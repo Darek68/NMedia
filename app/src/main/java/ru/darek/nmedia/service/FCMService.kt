@@ -14,6 +14,18 @@ import ru.darek.nmedia.R
 import ru.darek.nmedia.dto.Post
 import kotlin.random.Random
 
+
+class FCMService : FirebaseMessagingService() {
+    override fun onMessageReceived(message: RemoteMessage) {
+
+        println(Gson().toJson(message))
+    }
+
+    override fun onNewToken(token: String) {
+        println("Token: $token")
+    }
+}
+/*
 class FCMService : FirebaseMessagingService() {
     private val action = "action"
     private val content = "content"
@@ -35,6 +47,7 @@ class FCMService : FirebaseMessagingService() {
     }
 
    override fun onMessageReceived(message: RemoteMessage) {
+      // println(Gson()).toJson(message))
 
        message.data[action]?.let {
            val name = when (message.data[action]){
@@ -62,6 +75,10 @@ class FCMService : FirebaseMessagingService() {
            } */
        }
    }
+    override fun onNewToken(token: String) {
+        println("Token: $token")
+    }
+
     private fun handleUnknown(unknow: String) {
         val notification = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.ic_notification)
@@ -76,9 +93,7 @@ class FCMService : FirebaseMessagingService() {
         NotificationManagerCompat.from(this)
             .notify(Random.nextInt(100_000), notification)
     }
-    override fun onNewToken(token: String) {
-        println("Token: $token")
-    }
+
 
     private fun handleLike(content: Like) {
         val notification = NotificationCompat.Builder(this, channelId)
@@ -131,15 +146,4 @@ data class NewPost(
     val postAuthor: String,
     val text: String
 )
-
-/*
-class FCMService : FirebaseMessagingService() {
-    override fun onMessageReceived(message: RemoteMessage) {
-
-        println(Gson().toJson(message))
-    }
-
-    override fun onNewToken(token: String) {
-        println("Token: $token")
-    }
-} */
+*/

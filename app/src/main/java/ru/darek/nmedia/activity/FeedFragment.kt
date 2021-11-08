@@ -111,22 +111,11 @@ class FeedFragment : Fragment() {
                 val bundle = Bundle().apply {
                     putString("pic", pictureUrl)
                 }
-                // viewModel.edited.value = post
                 findNavController().navigate(
                     R.id.action_feedFragment_to_picFragment,
                     bundle
                 )
             }
-          /*  override fun onPicture(post: Post) {
-                val bundle = Bundle().apply {
-                    putLong("id", post.id)
-                }
-                // viewModel.edited.value = post
-                findNavController().navigate(
-                    R.id.action_feedFragment_to_picFragment,
-                    bundle
-                )
-            } */
         })
         binding.list.adapter = adapter
         //binding.newerButton.isVisible = false
@@ -178,7 +167,7 @@ class FeedFragment : Fragment() {
             viewModel.loadPosts()
         }
         binding.fab.setOnClickListener {
-          /*  if (!viewModelAuth.authenticated) {    // Раскоментить на след ДЗ !!!
+            if (!viewModelAuth.authenticated) {    // Раскоментить на след ДЗ !!!
                 findNavController().navigate(
                     R.id.action_feedFragment_to_authFragment
                 )
@@ -200,7 +189,7 @@ class FeedFragment : Fragment() {
                     "Вы должны залогинится!",
                     Toast.LENGTH_SHORT
                 ).show()
-            } */
+            }
             val bundle = Bundle().apply {
                 putString("content", "Укажите текст поста..")
             }

@@ -13,9 +13,11 @@ import ru.darek.nmedia.BuildConfig
 import ru.darek.nmedia.auth.AppAuth
 import ru.darek.nmedia.dto.*
 import ru.darek.nmedia.viewmodel.Auth
+import ru.darek.nmedia.dto.PushToken
 
-private const val BASE_URL = "${BuildConfig.BASE_URL}/api/"
+//private const val BASE_URL = "${BuildConfig.BASE_URL}/api/"
 //private const val BASE_URL = "http://10.0.2.2:9999/api/"
+private const val BASE_URL = "http://192.168.1.73:9999/api/"
 
 private val logging = HttpLoggingInterceptor().apply {
     if (BuildConfig.DEBUG) {
@@ -43,6 +45,9 @@ private val retrofit = Retrofit.Builder()
     .build()
 
 interface PostsApiService {
+    @POST("users/push-tokens")
+    suspend fun save(@Body pushToken: PushToken): Response<Unit>
+
     @GET("posts")
     suspend fun getAll(): Response<List<Post>>
 

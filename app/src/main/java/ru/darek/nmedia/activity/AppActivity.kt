@@ -21,6 +21,10 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+         // Получение Token для Firebase
+      /*  FirebaseMessaging.getInstance().token.addOnSuccessListener {
+            println("Token >>>   " + it)
+        } */
 
         intent?.let {
             if (it.action != Intent.ACTION_SEND) {

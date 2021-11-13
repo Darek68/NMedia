@@ -7,24 +7,156 @@ import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
 import ru.darek.nmedia.R
+import ru.darek.nmedia.auth.AppAuth
 import ru.darek.nmedia.dto.Post
 import kotlin.random.Random
 
+class PushMes{
+    val recipientId = 0
+    val content = ""
+}
 
 class FCMService : FirebaseMessagingService() {
+    private val content = "content"
+    private val channelId = "remote"
+    private val recipientId = "recipientId"
+    private val gson = Gson()
+
+    override fun onCreate() {
+        super.onCreate()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = getString(R.string.channel_remote_name)
+            val descriptionText = getString(R.string.channel_remote_description)
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(channelId, name, importance).apply {
+                description = descriptionText
+            }
+            val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            manager.createNotificationChannel(channel)
+        }
+    }
+
     override fun onMessageReceived(message: RemoteMessage) {
 
         println(Gson().toJson(message))
+        //val appAuth = AppAuth.getInstance()
+        val myId = AppAuth.getInstance().authStateFlow.value.id
+        message.data[content]?.let {
+            val mess = gson.fromJson(message.data[content], PushMes::class.java)
+            val recipientId = mess.recipientId.toLong()
+            println("myId >>>   " + myId.toString())
+            println("recipientId >>>   " + mess.recipientId.toString())
+            println("content >>>   " + mess.content)
+
+            if (recipientId == myId || recipientId == null) {
+                // показываем Notification
+                showPush(mess)
+            } else {
+                // переотправить свой push token
+                FirebaseMessaging.getInstance().token.addOnSuccessListener {
+                    println("Получен новый Token >>>   \n " + it)
+                }
+            }
+            // println("content >>>   " + message.data["content"])
+            // println("recipientId 222>>>   " + gson.fromJson(message.data[content],PushMes::class.java).recipientId)
+        }
+    }
+         fun showPush(mes:PushMes) {
+            val notification = NotificationCompat.Builder(this, channelId)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setContentTitle(
+                    getString(
+                        R.string.notification_test_push,
+                        mes.content,
+                        mes.recipientId.toString(),
+                    )
+                )
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .build()
+
+            NotificationManagerCompat.from(this)
+                .notify(Random.nextInt(100_000), notification)
+        }
+    //println("Token >>>   " + it)
+}
+/*
+class FCMService : FirebaseMessagingService() {
+    private val content = "content"
+    private val channelId = "remote"
+    private val recipientId = "recipientId"
+    private val gson = Gson()
+
+    override fun onCreate() {
+        super.onCreate()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = getString(R.string.channel_remote_name)
+            val descriptionText = getString(R.string.channel_remote_description)
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(channelId, name, importance).apply {
+                description = descriptionText
+            }
+            val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            manager.createNotificationChannel(channel)
+        }
+    }
+
+    override fun onMessageReceived(message: RemoteMessage) {
+        /* если recipientId = тому, что в AppAuth, то всё ok, показываете Notification;
+если recipientId = 0 (и не равен вашему), значит сервер считает, что у вас анонимная аутентификация и вам нужно переотправить свой push token;
+если recipientId != 0 (и не равен вашему), значит сервер считает, что на вашем устройстве другая аутентификация и вам нужно переотправить свой push token;
+если recipientId = null, то это массовая рассылка, показываете Notification. */
+        /* MyId - это id пользователя из AppAuth. Теперь вам не нужно никаких хитрых flatmap, поэтому просто обращайтесь к AppAuth.getInstance и берите оттуда id. */
+        val appAuth = AppAuth.getInstance()
+        val myId = appAuth.authStateFlow.value.id
+         message.data[recipientId]?.let {
+
+            /* if (it == )
+             when (Action.values().first() {it.name == name}){
+                 Action.LIKE -> handleLike(gson.fromJson(message.data[content],Like::class.java))
+                 Action.NEWPOST -> handlePost(gson.fromJson(message.data[content],NewPost::class.java))
+                 else -> handleUnknown(it)
+             }
+
+
+            val name = when (message.data[recipientId]){
+                "LIKE" -> "LIKE"
+                "NEWPOST" -> "NEWPOST"
+                else -> "OTHER"
+            }
+            when (Action.values().first() {it.name == name}){
+                Action.LIKE -> handleLike(gson.fromJson(message.data[content],Like::class.java))
+                Action.NEWPOST -> handlePost(gson.fromJson(message.data[content],NewPost::class.java))
+                else -> handleUnknown(it)
+            }
+
+             try {
+             val enum = Action.valueOf(it)
+                 when (enum) {
+                     Action.LIKE -> handleLike(gson.fromJson(message.data[content],
+                         Like::class.java))
+                     Action.NEWPOST -> handlePost(gson.fromJson(message.data[content],
+                         NewPost::class.java))
+                 }
+             } catch (e: IllegalArgumentException) {
+                 handleUnknown(it)
+                 return@let
+             } */
+        }
+        println("content >>>   " + message.data["content"])
+        println("recipientId >>>   " + message.data["recipientId"])
+        //println("Token >>>   " + it)
     }
 
     override fun onNewToken(token: String) {
+       // AppAuth.getInstance().sendPushToken(token)
         println("Token: $token")
     }
-}
+} */
 
 /*
 class FCMService : FirebaseMessagingService() {
@@ -148,3 +280,4 @@ data class NewPost(
     val text: String
 )
 */
+

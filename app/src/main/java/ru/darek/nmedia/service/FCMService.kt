@@ -42,9 +42,7 @@ class FCMService : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
-
-        println(Gson().toJson(message))
-        //val appAuth = AppAuth.getInstance()
+      //  println(Gson().toJson(message))
         val myId = AppAuth.getInstance().authStateFlow.value.id
         message.data[content]?.let {
             val mess = gson.fromJson(message.data[content], PushMes::class.java)
@@ -62,8 +60,6 @@ class FCMService : FirebaseMessagingService() {
                     println("Получен новый Token >>>   \n " + it)
                 }
             }
-            // println("content >>>   " + message.data["content"])
-            // println("recipientId 222>>>   " + gson.fromJson(message.data[content],PushMes::class.java).recipientId)
         }
     }
          fun showPush(mes:PushMes) {
@@ -78,7 +74,6 @@ class FCMService : FirebaseMessagingService() {
                 )
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .build()
-
             NotificationManagerCompat.from(this)
                 .notify(Random.nextInt(100_000), notification)
         }

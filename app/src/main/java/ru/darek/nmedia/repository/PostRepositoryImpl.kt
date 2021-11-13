@@ -1,5 +1,8 @@
 package ru.darek.nmedia.repository
 
+import android.net.Uri
+import androidx.core.net.toFile
+import androidx.core.net.toUri
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -9,16 +12,21 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import okio.IOException
 import ru.darek.nmedia.api.*
 import ru.darek.nmedia.dao.PostDao
+import ru.darek.nmedia.dao.PostWorkDao
 import ru.darek.nmedia.dto.*
 import ru.darek.nmedia.dto.Post
 import ru.darek.nmedia.entity.PostEntity
+import ru.darek.nmedia.entity.PostWorkEntity
 
 import ru.darek.nmedia.entity.toDto
 import ru.darek.nmedia.entity.toEntity
 import ru.darek.nmedia.enumeration.AttachmentType
 import ru.darek.nmedia.error.*
 
- class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
+ class PostRepositoryImpl(
+     private val dao: PostDao,
+     private val postWorkDao: PostWorkDao,
+ ) : PostRepository {
      override val data = dao.getAll()
          .map(List<PostEntity>::toDto)
          .flowOn(Dispatchers.Default)
@@ -177,6 +185,31 @@ import ru.darek.nmedia.error.*
              }
          } catch (e: IOException) {
              throw NetworkError
+         } catch (e: Exception) {
+             throw UnknownError
+         }
+     }
+     override suspend fun saveWork(post: Post, upload: MediaUpload?): Long {
+         try {
+             val entity = PostWorkEntity.fromDto(post).apply {
+                 if (upload != null) {
+                     this.attachment?.url = upload.file.toUri().toString()
+                 }
+             }
+             return postWorkDao.insert(entity)
+         } catch (e: Exception) {
+             throw UnknownError
+         }
+     }
+
+     override suspend fun processWork(id: Long) {
+         try {
+             // TODO: handle this in homework
+             val entity = postWorkDao.getById(id)
+             if (entity.attachment?.url != null) {
+                 val upload = MediaUpload(Uri.parse(entity.attachment?.url).toFile())
+             }
+             println(entity.id)
          } catch (e: Exception) {
              throw UnknownError
          }

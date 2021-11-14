@@ -1,12 +1,10 @@
 package ru.darek.nmedia.dao
 
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 import ru.darek.nmedia.entity.PostEntity
+import ru.darek.nmedia.enumeration.AttachmentType
 
 @Dao
 interface PostDao {
@@ -37,5 +35,10 @@ interface PostDao {
     suspend fun cancelNew()
 }
 
-
+class Converters {
+    @TypeConverter
+    fun toAttachmentType(value: String) = enumValueOf<AttachmentType>(value)
+    @TypeConverter
+    fun fromAttachmentType(value: AttachmentType) = value.name
+}
 

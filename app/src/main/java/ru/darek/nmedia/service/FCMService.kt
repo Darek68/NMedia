@@ -7,13 +7,20 @@ import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.google.firebase.messaging.ktx.messaging
 import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import ru.darek.nmedia.R
+import ru.darek.nmedia.api.PostsApi
 import ru.darek.nmedia.auth.AppAuth
-import ru.darek.nmedia.dto.Post
+import ru.darek.nmedia.dto.*
 import kotlin.random.Random
 
 class PushMes{
@@ -58,6 +65,8 @@ class FCMService : FirebaseMessagingService() {
                 // переотправить свой push token
                 FirebaseMessaging.getInstance().token.addOnSuccessListener {
                     println("Получен новый Token >>>   \n " + it)
+                   // AppAuth.sendPushToken()
+                    getPushTokenAndSend()
                 }
             }
         }

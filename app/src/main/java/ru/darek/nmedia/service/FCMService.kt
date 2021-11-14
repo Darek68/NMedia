@@ -63,11 +63,12 @@ class FCMService : FirebaseMessagingService() {
                 showPush(mess)
             } else {
                 // переотправить свой push token
-                FirebaseMessaging.getInstance().token.addOnSuccessListener {
-                    println("Получен новый Token >>>   \n " + it)
+                getPushTokenAndSend() //тут и запросим и отправим
+              //  FirebaseMessaging.getInstance().token.addOnSuccessListener {
+                  //  println("Получен новый Token >>>   \n " + it)
                    // AppAuth.sendPushToken()
-                    getPushTokenAndSend()
-                }
+
+               // }
             }
         }
     }

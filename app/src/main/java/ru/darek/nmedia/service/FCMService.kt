@@ -24,14 +24,13 @@ import ru.darek.nmedia.dto.*
 import kotlin.random.Random
 
 class PushMes{
-    val recipientId = 0
+    val recipientId: Long ? = 0
     val content = ""
 }
 
 class FCMService : FirebaseMessagingService() {
     private val content = "content"
     private val channelId = "remote"
-    private val recipientId = "recipientId"
     private val gson = Gson()
 
     override fun onCreate() {
@@ -53,7 +52,7 @@ class FCMService : FirebaseMessagingService() {
         val myId = AppAuth.getInstance().authStateFlow.value.id
         message.data[content]?.let {
             val mess = gson.fromJson(message.data[content], PushMes::class.java)
-            val recipientId = mess.recipientId.toLong()
+            val recipientId = mess.recipientId
             println("myId >>>   " + myId.toString())
             println("recipientId >>>   " + mess.recipientId.toString())
             println("content >>>   " + mess.content)

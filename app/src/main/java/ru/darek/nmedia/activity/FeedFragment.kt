@@ -167,13 +167,10 @@ class FeedFragment : Fragment() {
             viewModel.loadPosts()
         }
         binding.fab.setOnClickListener {
-            if (!viewModelAuth.authenticated) {    // Раскоментить на след ДЗ !!!
+            if (!viewModelAuth.authenticated) {
                 findNavController().navigate(
                     R.id.action_feedFragment_to_authFragment
                 )
-            // Вот эти строки портят работу :-(
-              //  AndroidUtils.hideKeyboard(requireView())
-              //  findNavController().popBackStack()
             }
             if (viewModelAuth.authenticated) {
                 val bundle = Bundle().apply {
@@ -190,13 +187,6 @@ class FeedFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
-            val bundle = Bundle().apply {
-                putString("content", "Укажите текст поста..")
-            }
-            findNavController().navigate(
-                R.id.action_feedFragment_to_newPostFragment,
-                bundle
-            )
         }
         return binding.root
     }

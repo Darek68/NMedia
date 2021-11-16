@@ -14,7 +14,7 @@ class RefreshPostsWorker(
     params: WorkerParameters
 ) : CoroutineWorker(applicationContext, params) {
     companion object {
-        const val name = "ru.netology.work.RefreshPostsWorker"
+        const val name = "ru.darek.work.RefreshPostsWorker"
     }
 
     override suspend fun doWork(): Result = withContext(Dispatchers.Default) {

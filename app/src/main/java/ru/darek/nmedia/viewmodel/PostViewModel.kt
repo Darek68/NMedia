@@ -91,9 +91,11 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             viewModelScope.launch {
                 try {
                     _dataState.value = FeedModelState(loading = true)
+                    // запишем в БД и получим id
                     val id = repository.saveWork(
                         it, _photo.value?.uri?.let { MediaUpload(it.toFile()) }
                     )
+                    //Запихнем id в data и через setInputData передадим в Task
                     val data = workDataOf(SavePostWorker.postKey to id)
                     val constraints = Constraints.Builder()
                         .setRequiredNetworkType(NetworkType.CONNECTED)

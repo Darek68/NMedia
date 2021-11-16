@@ -55,7 +55,35 @@ import ru.darek.nmedia.error.*
              throw UnknownError
          }
      }
+     // полученный Post переводим в PostWorkEntity и запишем в БД. Вернем id этой записи
+     override suspend fun saveWork(post: Post, upload: MediaUpload?): Long {
+         try {
+             val entity = PostWorkEntity.fromDto(post).apply {
+                 if (upload != null) {
+                     this.attachment?.url = upload.file.toUri().toString()
+                 }
+             }
+             return postWorkDao.insert(entity)
+         } catch (e: Exception) {
+             throw UnknownError
+         }
+     }
 
+     override suspend fun processWork(id: Long) {
+         try {  // TODO: handle this in homework
+             val entity = postWorkDao.getById(id)
+             if (entity.attachment?.url != null) {
+                 val upload = MediaUpload(Uri.parse(entity.attachment?.url).toFile())
+                 saveWithAttachment(entity.toDto(),upload)
+             } else {
+                 save(entity.toDto())
+             }
+             println(entity.id)
+             postWorkDao.removeById(id)
+         } catch (e: Exception) {
+             throw UnknownError
+         }
+     }
     override suspend fun save(post: Post) {
         try {
             dao.insert(PostEntity.fromDto(post))
@@ -189,30 +217,6 @@ import ru.darek.nmedia.error.*
              throw UnknownError
          }
      }
-     override suspend fun saveWork(post: Post, upload: MediaUpload?): Long {
-         try {
-             val entity = PostWorkEntity.fromDto(post).apply {
-                 if (upload != null) {
-                     this.attachment?.url = upload.file.toUri().toString()
-                 }
-             }
-             return postWorkDao.insert(entity)
-         } catch (e: Exception) {
-             throw UnknownError
-         }
-     }
 
-     override suspend fun processWork(id: Long) {
-         try {
-             // TODO: handle this in homework
-             val entity = postWorkDao.getById(id)
-             if (entity.attachment?.url != null) {
-                 val upload = MediaUpload(Uri.parse(entity.attachment?.url).toFile())
-             }
-             println(entity.id)
-         } catch (e: Exception) {
-             throw UnknownError
-         }
-     }
 }
 

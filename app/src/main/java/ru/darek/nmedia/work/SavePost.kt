@@ -16,6 +16,7 @@ class SavePostWorker(
     }
 
     override suspend fun doWork(): Result {
+        // извлекаем id из data (.setInputData(data) => inputData.)
         val id = inputData.getLong(postKey, 0L)
         if (id == 0L) {
             return Result.failure()
@@ -26,6 +27,7 @@ class SavePostWorker(
                 AppDb.getInstance(context = applicationContext).postWorkDao(),
             )
         return try {
+           // if (repository.)
             repository.processWork(id)
             Result.success()
         } catch (e: Exception) {

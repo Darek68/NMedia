@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import ru.darek.nmedia.db.AppDb
+import ru.darek.nmedia.error.DbError
 import ru.darek.nmedia.repository.PostRepository
 import ru.darek.nmedia.repository.PostRepositoryImpl
 
@@ -27,9 +28,11 @@ class SavePostWorker(
                 AppDb.getInstance(context = applicationContext).postWorkDao(),
             )
         return try {
-           // if (repository.)
             repository.processWork(id)
             Result.success()
+        } catch (e: DbError){
+           // println("Ошибка!!! doWork() >>> \n" + e.message + "\n" + e.toString())
+            Result.failure()
         } catch (e: Exception) {
             Result.retry()
         }

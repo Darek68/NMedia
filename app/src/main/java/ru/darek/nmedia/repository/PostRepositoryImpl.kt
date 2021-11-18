@@ -22,8 +22,9 @@ import ru.darek.nmedia.entity.toDto
 import ru.darek.nmedia.entity.toEntity
 import ru.darek.nmedia.enumeration.AttachmentType
 import ru.darek.nmedia.error.*
+import java.lang.NullPointerException
 
- class PostRepositoryImpl(
+class PostRepositoryImpl(
      private val dao: PostDao,
      private val postWorkDao: PostWorkDao,
  ) : PostRepository {
@@ -71,17 +72,22 @@ import ru.darek.nmedia.error.*
 
      override suspend fun processWork(id: Long) {
          try {  // TODO: handle this in homework
-             val entity = postWorkDao.getById(id)
+             val entity = postWorkDao.getById(666L)
              if (entity.attachment?.url != null) {
                  val upload = MediaUpload(Uri.parse(entity.attachment?.url).toFile())
-                 saveWithAttachment(entity.toDto(),upload)
+                 saveWithAttachment(entity.toDto(), upload)
              } else {
                  save(entity.toDto())
              }
              println(entity.id)
              postWorkDao.removeById(id)
+         } catch (e: NullPointerException){
+            // println("Ошибка!!! processWork >>> \n" + e.message + "\n" + e.toString())
+             throw DbError
+            // println("Это уже не выводим.. processWork >>> \n" + e.message + "\n" + e.toString())
          } catch (e: Exception) {
-             throw UnknownError
+            // println("Ошибка!!! >>> \n" + e.message + "\n" + e.toString())
+              throw UnknownError
          }
      }
     override suspend fun save(post: Post) {

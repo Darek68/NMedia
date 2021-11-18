@@ -69,10 +69,18 @@ class PostRepositoryImpl(
              throw UnknownError
          }
      }
-
+    override suspend fun removeWork(id: Long) {
+        try { println("PostRepositoryImpl.removeWork >>> id = $id")
+            removeById(id)
+        } catch (e: NetworkError){
+            throw DbError
+        } catch (e: Exception) {
+            throw UnknownError
+        }
+    }
      override suspend fun processWork(id: Long) {
-         try {  // TODO: handle this in homework
-             val entity = postWorkDao.getById(666L)
+         try {
+             val entity = postWorkDao.getById(id)
              if (entity.attachment?.url != null) {
                  val upload = MediaUpload(Uri.parse(entity.attachment?.url).toFile())
                  saveWithAttachment(entity.toDto(), upload)
@@ -211,7 +219,7 @@ class PostRepositoryImpl(
          .flowOn(Dispatchers.Default)
 
      override suspend fun removeById(id:Long){
-         try {
+         try { println("PostRepositoryImpl.removeById >>> id = $id")
              dao.removeById(id)
              val response = PostsApi.retrofitService.removeById(id)
              if (!response.isSuccessful) {

@@ -19,6 +19,7 @@ import ru.darek.nmedia.model.FeedModel
 import ru.darek.nmedia.repository.*
 import ru.darek.nmedia.util.SingleLiveEvent
 import ru.darek.nmedia.model.FeedModelState
+import ru.darek.nmedia.work.RemovePostWorker
 import ru.darek.nmedia.work.SavePostWorker
 import ru.netology.nmedia.model.PhotoModel
 import java.io.File
@@ -84,6 +85,24 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         get() = _photo
     init {
         loadPosts()
+    }
+    fun removeById(id: Long) = viewModelScope.launch {
+        try { println("PostVieModel >>> id = $id")
+            _dataState.value = FeedModelState(loading = true)
+            //Запихнем id в data и через setInputData передадим в Task
+            val data = workDataOf(RemovePostWorker.postKey to id)
+            val constraints = Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build()
+            val request = OneTimeWorkRequestBuilder<RemovePostWorker>()
+                .setInputData(data)
+                .setConstraints(constraints)
+                .build()
+            workManager.enqueue(request)
+            _dataState.value = FeedModelState()
+        } catch (e: Exception) {
+            _dataState.value = FeedModelState(error = true)
+        }
     }
     fun save() {
         edited.value?.let {
@@ -196,7 +215,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun removeById(id: Long) = viewModelScope.launch {
+    fun removeByIdOld(id: Long) = viewModelScope.launch {
         try {
 
             //_dataState.value = FeedModelState(refreshing = true)

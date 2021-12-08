@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import ru.darek.nmedia.R
 import ru.darek.nmedia.adapter.PostCallback
 import ru.darek.nmedia.adapter.PostsAdapter
@@ -26,6 +27,7 @@ import ru.darek.nmedia.viewmodel.AuthViewModel
 import ru.darek.nmedia.viewmodel.PostViewModel
 import java.io.File
 
+@AndroidEntryPoint
 class FeedFragment : Fragment() {
 
     private val viewModel: PostViewModel by viewModels(

@@ -6,7 +6,9 @@ import android.net.Uri
 import androidx.core.net.toFile
 import androidx.lifecycle.*
 import androidx.work.*
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
@@ -23,6 +25,7 @@ import ru.darek.nmedia.work.RemovePostWorker
 import ru.darek.nmedia.work.SavePostWorker
 import ru.netology.nmedia.model.PhotoModel
 import java.io.File
+import javax.inject.Inject
 
 private val empty = Post(
     id = 0,
@@ -38,7 +41,7 @@ private val empty = Post(
     video = ""
 )
 private val noPhoto = PhotoModel()
-
+/*
 class PostViewModel(application: Application) : AndroidViewModel(application) {
    // упрощённый вариант
    private val repository: PostRepository =
@@ -59,8 +62,25 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                         posts.isEmpty()
                     )
                 }
-        }.asLiveData(Dispatchers.Default)
+        }.asLiveData(Dispatchers.Default) */
 
+@OptIn(ExperimentalCoroutinesApi::class)
+@HiltViewModel
+class PostViewModel @Inject constructor(
+        private val repository: PostRepository,
+        auth: AppAuth,
+    ) : ViewModel() {
+        val data: LiveData<FeedModel> = auth.authStateFlow
+            .flatMapLatest { (myId, _) ->
+                repository.data
+                    .map { posts ->
+                        FeedModel(
+                            posts.map { it.copy(ownedByMe = it.authorId == myId) },
+                            posts.isEmpty()
+                        )
+                    }
+            }.asLiveData(Dispatchers.Default)
+    private val workManager: WorkManager = WorkManager.getInstance(application)
    /* val data: LiveData<FeedModel>  = repository.data
         .map(::FeedModel)
         .asLiveData(Dispatchers.Default) */

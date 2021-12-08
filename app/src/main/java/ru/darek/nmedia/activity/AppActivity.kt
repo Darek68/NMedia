@@ -13,10 +13,16 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.messaging.FirebaseMessaging
+import dagger.hilt.android.AndroidEntryPoint
 import ru.darek.nmedia.auth.AppAuth
 import ru.darek.nmedia.viewmodel.AuthViewModel
+import javax.inject.Inject
 
+//class AppActivity : AppCompatActivity(R.layout.activity_app) {
+@AndroidEntryPoint
 class AppActivity : AppCompatActivity(R.layout.activity_app) {
+    @Inject
+    lateinit var auth: AppAuth
     private val viewModel: AuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,12 +73,12 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
             R.id.signup -> {
                 println("Кнопка signup!")
                 // TODO: just hardcode it, implementation must be in homework
-                AppAuth.getInstance().setAuth(5, "x-token")
+                auth.setAuth(5, "x-token")
                 true
             }
             R.id.signout -> {
                 println("Вылогинимся!")
-                AppAuth.getInstance().removeAuth()
+                auth.removeAuth()
                 true
             }
             else -> super.onOptionsItemSelected(item)

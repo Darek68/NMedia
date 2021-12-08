@@ -2,21 +2,35 @@ package ru.darek.nmedia.application
 
 import android.app.Application
 import androidx.work.*
+import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.darek.nmedia.auth.AppAuth
 import ru.darek.nmedia.work.RefreshPostsWorker
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-/*
+
+@HiltAndroidApp
 class NMediaApplication : Application() {
+    private val appScope = CoroutineScope(Dispatchers.Default)
+
+    @Inject
+    lateinit var auth: AppAuth
+
     override fun onCreate() {
         super.onCreate()
-        AppAuth.initApp(this)
+        setupAuth()
     }
-} */
 
+    private fun setupAuth() {
+        appScope.launch {
+            auth.sendPushToken()
+        }
+    }
+}
+/*
 class NMediaApplication : Application() {
     private val appScope = CoroutineScope(Dispatchers.Default)
 
@@ -47,4 +61,4 @@ class NMediaApplication : Application() {
             )
         }
     }
-}
+} */

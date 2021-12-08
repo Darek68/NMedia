@@ -7,11 +7,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import dagger.hilt.android.AndroidEntryPoint
 import ru.darek.nmedia.BuildConfig
 import ru.darek.nmedia.R
 import ru.darek.nmedia.databinding.FragmentPicBinding
 import ru.darek.nmedia.viewmodel.PostViewModel
 
+@AndroidEntryPoint
 class PicFragment : Fragment() {
     private val viewModel: PostViewModel by viewModels(
         ownerProducer = ::requireParentFragment

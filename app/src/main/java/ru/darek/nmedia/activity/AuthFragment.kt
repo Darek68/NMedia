@@ -1,32 +1,23 @@
 package ru.darek.nmedia.activity
 
-import android.content.Context
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.viewModelScope
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import okhttp3.*
 import ru.darek.nmedia.R
-import ru.darek.nmedia.api.PostsApi
-import ru.darek.nmedia.auth.AppAuth
 import ru.darek.nmedia.databinding.FragmentAuthBinding
-import ru.darek.nmedia.databinding.FragmentNewPostBinding
-import ru.darek.nmedia.entity.PostEntity
-import ru.darek.nmedia.error.ApiError
-import ru.darek.nmedia.error.NetworkError
-import ru.darek.nmedia.error.UnknownError
 import ru.darek.nmedia.util.AndroidUtils
-import ru.darek.nmedia.viewmodel.AuthViewModel
 import ru.darek.nmedia.viewmodel.FrmViewModel
-import ru.darek.nmedia.viewmodel.PostViewModel
 
+@AndroidEntryPoint
 class AuthFragment: Fragment() {
 
     private val viewModelFrm: FrmViewModel by viewModels(

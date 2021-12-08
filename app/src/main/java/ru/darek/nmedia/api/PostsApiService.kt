@@ -1,5 +1,6 @@
 package ru.darek.nmedia.api
 
+import okhttp3.Interceptor
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -24,7 +25,14 @@ private val logging = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
 }
-
+fun okhttp(vararg interceptors: Interceptor): OkHttpClient = OkHttpClient.Builder()
+    .apply {
+        interceptors.forEach {
+            this.addInterceptor(it)
+        }
+    }
+    .build()
+/*
 private val okhttp = OkHttpClient.Builder()
     .addInterceptor(logging)
     .addInterceptor { chain ->
@@ -36,13 +44,18 @@ private val okhttp = OkHttpClient.Builder()
         }
         chain.proceed(chain.request())
     }
+    .build() */
+fun retrofit(client: OkHttpClient): Retrofit = Retrofit.Builder()
+    .addConverterFactory(GsonConverterFactory.create())
+    .baseUrl(BASE_URL)
+    .client(client)
     .build()
-
+/*
 private val retrofit = Retrofit.Builder()
     .addConverterFactory(GsonConverterFactory.create())
     .baseUrl(BASE_URL)
     .client(okhttp)
-    .build()
+    .build() */
 
 interface PostsApiService {
     @POST("users/push-tokens")
@@ -84,9 +97,9 @@ interface PostsApiService {
     @POST("users/authentication")
     suspend fun updateUser(@Field("login") login: String, @Field("pass") pass: String): Response<Auth>
 }
-
+/*
 object PostsApi {
     val retrofitService by lazy {
         retrofit.create<PostsApiService>()
     }
-}
+} */

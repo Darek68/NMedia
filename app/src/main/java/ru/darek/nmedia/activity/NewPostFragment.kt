@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.dhaval2404.imagepicker.constant.ImageProvider
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_new_post.*
 import ru.darek.nmedia.R
 import ru.darek.nmedia.databinding.FragmentNewPostBinding
@@ -21,6 +22,7 @@ import ru.darek.nmedia.util.AndroidUtils
 import ru.darek.nmedia.viewmodel.PostViewModel
 import java.util.prefs.Preferences
 
+@AndroidEntryPoint
 class NewPostFragment : Fragment() {
 
     val edit = arguments?.getBoolean("edit") == true

@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_post.*
 import ru.darek.nmedia.R
 import ru.darek.nmedia.adapter.PostCallback
@@ -25,6 +26,7 @@ import ru.darek.nmedia.util.AndroidUtils
 import ru.darek.nmedia.util.AndroidUtils.getStrCnt
 import ru.darek.nmedia.viewmodel.PostViewModel
 
+@AndroidEntryPoint
 class PostFragment : Fragment() {
 
     private val viewModel: PostViewModel by viewModels(

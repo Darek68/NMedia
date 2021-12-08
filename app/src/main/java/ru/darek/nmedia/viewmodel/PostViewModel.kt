@@ -69,6 +69,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 class PostViewModel @Inject constructor(
         private val repository: PostRepository,
         auth: AppAuth,
+        private val workManager: WorkManager,
     ) : ViewModel() {
         val data: LiveData<FeedModel> = auth.authStateFlow
             .flatMapLatest { (myId, _) ->
@@ -80,7 +81,7 @@ class PostViewModel @Inject constructor(
                         )
                     }
             }.asLiveData(Dispatchers.Default)
-    private val workManager: WorkManager = WorkManager.getInstance(application)
+   // private val workManager: WorkManager = WorkManager.getInstance(application)
    /* val data: LiveData<FeedModel>  = repository.data
         .map(::FeedModel)
         .asLiveData(Dispatchers.Default) */

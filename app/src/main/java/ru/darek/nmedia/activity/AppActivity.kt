@@ -18,21 +18,16 @@ import ru.darek.nmedia.auth.AppAuth
 import ru.darek.nmedia.viewmodel.AuthViewModel
 import javax.inject.Inject
 
-//class AppActivity : AppCompatActivity(R.layout.activity_app) {
 @AndroidEntryPoint
 class AppActivity : AppCompatActivity(R.layout.activity_app) {
     @Inject
     lateinit var auth: AppAuth
     @Inject
-    lateinit var gApiAvail: GoogleApiAvailability
+    lateinit var googleApiAvailability: GoogleApiAvailability
     private val viewModel: AuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-         // Получение Token для Firebase
-      /*  FirebaseMessaging.getInstance().token.addOnSuccessListener {
-            println("Token >>>   " + it)
-        } */
 
         intent?.let {
             if (it.action != Intent.ACTION_SEND) {
@@ -89,7 +84,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
 
     private fun checkGoogleApiAvailability() {
       //  with(GoogleApiAvailability.getInstance()) {
-        with(gApiAvail) {
+        with(googleApiAvailability) {
             val code = isGooglePlayServicesAvailable(this@AppActivity)
             if (code == ConnectionResult.SUCCESS) {
                 return@with
@@ -100,10 +95,6 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
             }
             Toast.makeText(this@AppActivity, R.string.google_play_unavailable, Toast.LENGTH_LONG)
                 .show()
-        }
-
-        FirebaseMessaging.getInstance().token.addOnSuccessListener {
-            println(it)
         }
     }
 }

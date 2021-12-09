@@ -12,6 +12,7 @@ import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import ru.darek.nmedia.R
+import ru.darek.nmedia.api.PostsApiService
 import ru.darek.nmedia.auth.AppAuth
 import ru.darek.nmedia.dto.*
 import javax.inject.Inject
@@ -29,6 +30,8 @@ class FCMService : FirebaseMessagingService() {
     private val gson = Gson()
     @Inject
     lateinit var auth: AppAuth
+    @Inject
+    lateinit var apiService: PostsApiService
 
     override fun onCreate() {
         super.onCreate()
@@ -60,7 +63,7 @@ class FCMService : FirebaseMessagingService() {
                 showPush(mess)
             } else {
                 // переотправить свой push token
-                getPushTokenAndSend() //тут и запросим и отправим
+                getPushTokenAndSend(apiService) //тут и запросим и отправим
               //  FirebaseMessaging.getInstance().token.addOnSuccessListener {
                   //  println("Получен новый Token >>>   \n " + it)
                    // AppAuth.sendPushToken()

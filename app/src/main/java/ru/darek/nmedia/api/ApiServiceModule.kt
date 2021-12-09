@@ -55,6 +55,5 @@ class ApiServiceModule {
             .build()
 
     @Singleton
-    @Provides
     fun provideApiService(retrofit: Retrofit): ApiServiceModule = retrofit.create()
 }

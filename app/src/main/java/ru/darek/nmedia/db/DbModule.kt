@@ -8,6 +8,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import ru.darek.nmedia.dao.PostDao
+import ru.darek.nmedia.dao.PostWorkDao
 import javax.inject.Singleton
 
 
@@ -23,4 +24,7 @@ object DbModule {
     }
     @Provides
     fun providesPostDao(appDb: AppDb): PostDao = appDb.postDao()
+
+    @Provides
+    fun providesPostWorkDao(appDb: AppDb): PostWorkDao = appDb.postWorkDao()
 }

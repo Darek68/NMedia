@@ -1,6 +1,7 @@
 package ru.darek.nmedia.application
 
 import android.app.Application
+import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.*
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
@@ -13,11 +14,15 @@ import javax.inject.Inject
 
 
 @HiltAndroidApp
-class NMediaApplication : Application() {
-    private val appScope = CoroutineScope(Dispatchers.Default)
+class NMediaApplication : Application(), Configuration.Provider{
+
+    @Inject
+    lateinit var workerFactory: HiltWorkerFactory
 
     @Inject
     lateinit var auth: AppAuth
+
+    private val appScope = CoroutineScope(Dispatchers.Default)
 
     override fun onCreate() {
         super.onCreate()
@@ -29,6 +34,10 @@ class NMediaApplication : Application() {
             auth.sendPushToken()
         }
     }
+    override fun getWorkManagerConfiguration() =
+        Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .build()
 }
 /*
 class NMediaApplication : Application() {

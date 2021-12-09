@@ -23,6 +23,8 @@ import javax.inject.Inject
 class AppActivity : AppCompatActivity(R.layout.activity_app) {
     @Inject
     lateinit var auth: AppAuth
+    @Inject
+    lateinit var gApiAvail: GoogleApiAvailability
     private val viewModel: AuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,7 +88,8 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
     }
 
     private fun checkGoogleApiAvailability() {
-        with(GoogleApiAvailability.getInstance()) {
+      //  with(GoogleApiAvailability.getInstance()) {
+        with(gApiAvail) {
             val code = isGooglePlayServicesAvailable(this@AppActivity)
             if (code == ConnectionResult.SUCCESS) {
                 return@with

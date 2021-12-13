@@ -67,12 +67,12 @@ class PostViewModel @Inject constructor(
     val dataState: LiveData<FeedModelState>
         get() = _dataState
 
-    val newerCount: LiveData<Int> = data.switchMap {
+   /* val newerCount: LiveData<Int> = data.switchMap {
         repository.getNewerCount(it.posts.firstOrNull()?.id ?: 0L)
             .catch { e -> e.printStackTrace() }
             //.catch { e -> _dataState.postValue(FeedModelState(error = true)) }
             .asLiveData(Dispatchers.Default)
-    }
+    } */
     private val edited = MutableLiveData(empty)
     private val _postCreated = SingleLiveEvent<Unit>()
     val postCreated: LiveData<Unit>
@@ -188,7 +188,7 @@ class PostViewModel @Inject constructor(
             _dataState.value = FeedModelState(error = true)
         }
     }
-    fun likeById(id: Long) = viewModelScope.launch {
+   /* fun likeById(id: Long) = viewModelScope.launch {
         val oldPost = data.value?.posts?.last { it.id == id }
         if (oldPost != null) {
             if (oldPost.likedByMe) {
@@ -212,7 +212,7 @@ class PostViewModel @Inject constructor(
                 }
             }
         }
-    }
+    } */
 
     fun removeByIdOld(id: Long) = viewModelScope.launch {
         try {

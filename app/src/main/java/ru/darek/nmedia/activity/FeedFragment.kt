@@ -11,10 +11,13 @@ import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import ru.darek.nmedia.R
 import ru.darek.nmedia.adapter.PostCallback
 import ru.darek.nmedia.adapter.PostsAdapter
@@ -123,21 +126,32 @@ class FeedFragment : Fragment() {
         //binding.newerButton.isVisible = false
         binding.newerButton.visibility = View.GONE
 
-        viewModel.data.observe(viewLifecycleOwner, { state ->
+        lifecycleScope.launchWhenCreated {
+            viewModel.data.collectLatest(adapter::submitData)
+        }
+       /* viewModel.data.observe(viewLifecycleOwner, { state ->
             adapter.submitList(state.posts)
             binding.emptyText.isVisible = state.empty
             binding.swiperefresh.isRefreshing
-        })
+        }) */
+        lifecycleScope.launchWhenCreated {
+            adapter.loadStateFlow.collectLatest { state ->
+                binding.swiperefresh.isRefreshing =
+                    state.refresh is LoadState.Loading ||
+                            state.prepend is LoadState.Loading ||
+                            state.append is LoadState.Loading
+            }
+        }
         viewModel.dataState.observe(viewLifecycleOwner, { state ->
             binding.progress.isVisible = state.loading
-            binding.swiperefresh.isRefreshing = state.refreshing
+           // binding.swiperefresh.isRefreshing = state.refreshing
              if(state.error) {
                  Snackbar.make(binding.root, R.string.error_loading, Snackbar.LENGTH_LONG)
                      .setAction("Retry"){viewModel.loadPosts()}
                      .show()
              }
             binding.errorGroup.isVisible = state.error
-            binding.swiperefresh.isRefreshing
+           // binding.swiperefresh.isRefreshing
         })
         viewModel.newerCount.observe(viewLifecycleOwner) { state ->
             if (state > 0) {
@@ -163,7 +177,8 @@ class FeedFragment : Fragment() {
              } */
         }
         binding.swiperefresh.setOnRefreshListener {
-            viewModel.refreshPosts()
+           // viewModel.refreshPosts()
+            adapter.refresh()
         }
         binding.retryButton.setOnClickListener {
             viewModel.loadPosts()

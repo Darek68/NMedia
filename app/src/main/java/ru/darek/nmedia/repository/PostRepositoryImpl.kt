@@ -3,7 +3,9 @@ package ru.darek.nmedia.repository
 import android.net.Uri
 import androidx.core.net.toFile
 import androidx.core.net.toUri
-import androidx.lifecycle.*
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
@@ -17,8 +19,6 @@ import ru.darek.nmedia.dto.*
 import ru.darek.nmedia.dto.Post
 import ru.darek.nmedia.entity.PostEntity
 import ru.darek.nmedia.entity.PostWorkEntity
-
-import ru.darek.nmedia.entity.toDto
 import ru.darek.nmedia.entity.toEntity
 import ru.darek.nmedia.enumeration.AttachmentType
 import ru.darek.nmedia.error.*
@@ -32,9 +32,14 @@ class PostRepositoryImpl @Inject constructor(
      private val apiService: PostsApiService,
      private val postWorkDao: PostWorkDao,
  ) : PostRepository {
-     override val data = dao.getAll()
+   /*  override val data = dao.getAll()
          .map(List<PostEntity>::toDto)
-         .flowOn(Dispatchers.Default)
+         .flowOn(Dispatchers.Default) */
+    override val data: Flow<PagingData<Post>> = Pager(
+        config = PagingConfig(pageSize = 5, enablePlaceholders = false),
+        pagingSourceFactory = { PostPagingSource(apiService) },
+    ).flow
+
     override suspend fun getAll() {
         try {
             dao.getAll() // что будет результатом вызова функции ...?  LiveData<List<PostEntity>> и что с этим делать?

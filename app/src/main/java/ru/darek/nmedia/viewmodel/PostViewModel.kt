@@ -1,23 +1,24 @@
 package ru.darek.nmedia.viewmodel
 
 import androidx.lifecycle.MutableLiveData
-import android.app.Application
 import android.net.Uri
 import androidx.core.net.toFile
 import androidx.lifecycle.*
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import androidx.work.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.darek.nmedia.auth.AppAuth
-import ru.darek.nmedia.db.AppDb
 import ru.darek.nmedia.dto.MediaUpload
 import ru.darek.nmedia.dto.Post
-import ru.darek.nmedia.model.FeedModel
 import ru.darek.nmedia.repository.*
 import ru.darek.nmedia.util.SingleLiveEvent
 import ru.darek.nmedia.model.FeedModelState
@@ -26,6 +27,8 @@ import ru.darek.nmedia.work.SavePostWorker
 import ru.netology.nmedia.model.PhotoModel
 import java.io.File
 import javax.inject.Inject
+import androidx.paging.map
+
 
 private val empty = Post(
     id = 0,
@@ -41,28 +44,6 @@ private val empty = Post(
     video = ""
 )
 private val noPhoto = PhotoModel()
-/*
-class PostViewModel(application: Application) : AndroidViewModel(application) {
-   // упрощённый вариант
-   private val repository: PostRepository =
-       PostRepositoryImpl(
-           AppDb.getInstance(context = application).postDao(),
-           AppDb.getInstance(context = application).postWorkDao(),
-       )
-    private val workManager: WorkManager =
-        WorkManager.getInstance(application)
-
-    val data: LiveData<FeedModel> = AppAuth.getInstance()
-        .authStateFlow
-        .flatMapLatest { (myId, _) ->
-            repository.data
-                .map { posts ->
-                    FeedModel(
-                        posts.map { it.copy(ownedByMe = it.authorId == myId) },
-                        posts.isEmpty()
-                    )
-                }
-        }.asLiveData(Dispatchers.Default) */
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
@@ -71,20 +52,17 @@ class PostViewModel @Inject constructor(
         auth: AppAuth,
         private val workManager: WorkManager,
     ) : ViewModel() {
-        val data: LiveData<FeedModel> = auth.authStateFlow
-            .flatMapLatest { (myId, _) ->
-                repository.data
-                    .map { posts ->
-                        FeedModel(
-                            posts.map { it.copy(ownedByMe = it.authorId == myId) },
-                            posts.isEmpty()
-                        )
-                    }
-            }.asLiveData(Dispatchers.Default)
-   // private val workManager: WorkManager = WorkManager.getInstance(application)
-   /* val data: LiveData<FeedModel>  = repository.data
-        .map(::FeedModel)
-        .asLiveData(Dispatchers.Default) */
+    private val cached = repository.data.cachedIn(viewModelScope)
+    val data: Flow<PagingData<Post>> = auth.authStateFlow
+        .flatMapLatest { (myId, _) ->
+            cached.map { pagingData ->
+                pagingData.map { post ->
+                    post.copy(ownedByMe = post.authorId == myId)
+                }
+            }
+        }
+        .flowOn(Dispatchers.Default)
+
     private val _dataState = MutableLiveData<FeedModelState>()
     val dataState: LiveData<FeedModelState>
         get() = _dataState
